@@ -1,0 +1,6 @@
+node_modules/
+lib/cashonize.fallback.js
+.env
+*.env.local
+*.key
+*.pem
