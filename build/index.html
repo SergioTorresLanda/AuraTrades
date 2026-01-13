@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AuraTrades | Community-Validated AI Trading Signals</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.mainnet.cash/mainnet-2.7.6.js"
+    integrity="sha384-u9mDomMo28zgAv4ldq+5TEm7RL9AmiC+Ys/Qtu/wbMUpIlWkYrmkCexGZwVs34tg"
+    crossorigin="anonymous"></script>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/12.7.0/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/12.7.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.7.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/12.7.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/12.7.0/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/12.7.0/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <script>
+      //Public reward wallet address
+      window.REWARD_WALLET_ADDRESS = 'bitcoincash:qzdjykh0cn370rc8hwa0mhx8r4vm9q9e3gmf4wfc44';
+      </script>
+
+  </head>
+
+  <nav class="how-it-works-nav">
+    <a class="nav-link" id="wallet-connect-btn">
+      <i class="fas fa-wallet"></i> Connect Wallet
+  </a>
+    <a href="#how-it-works" class="nav-link">
+        <i class="fas fa-question-circle"></i> How It Works
+    </a>
+     <!-- 
+    <a href="#signals" class="nav-link">
+        <i class="fas fa-chart-line"></i> Trading Signals
+    </a>
+    -->
+    <a href="#faq" class="nav-link">
+        <i class="fas fa-comments"></i> FAQ
+    </a>
+  </nav>
+  
+  <body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+          <img src="src/auratradesX.jpeg" alt="AuraTrades Logo" class="logo-icon">
+            <p class="tagline">Community-Validated AI Trading Signals • Powered by Collective Intuition</p>
+        </header>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="total-signals">3</div>
+                <div class="stat-label">Live Signals</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total-votes">33</div>
+                <div class="stat-label">Total Votes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="accuracy-rate">73%</div>
+                <div class="stat-label">Accuracy Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="active-users">15</div>
+                <div class="stat-label">Active Traders</div>
+            </div>
+        </div>
+        
+        <!-- Signals Grid -->
+        <div id="signals">
+          <div class="signals-grid">
+              <!-- Signal Card 1: Bullish Example -->
+              <div class="signal-card bullish">
+                  <div class="signal-header">
+                      <div class="signal-pair">
+                          <div class="pair-icon">
+                              <i class="fab fa-bitcoin"></i>
+                          </div>
+                          <div>
+                              <div class="pair-name">BTC/USDT</div>
+                              <div class="pair-fullname">Bitcoin / Tether</div>
+                          </div>
+                      </div>
+                      <div class="signal-action buy">LONG</div>
+                  </div>
+                  
+                  <div class="signal-meta">
+                      <div class="meta-item">
+                          <span class="meta-label">Entry price</span>
+                          <span class="meta-value">$90,500</span>
+                      </div>
+                      <div class="meta-item">
+                          <span class="meta-label">Target Price</span>
+                          <span class="meta-value">$95,000</span>
+                      </div>
+                      <div class="meta-item">
+                          <span class="meta-label">Stop Loss</span>
+                          <span class="meta-value">$87,500</span>
+                      </div>
+                  </div>
+                  
+                  <div class="aura-confidence">
+                      <div class="confidence-header">
+                          <span class="confidence-label">Aura Confidence</span>
+                          <span class="confidence-value">82%</span>
+                      </div>
+                      <div class="confidence-bar">
+                          <div class="confidence-fill bullish" style="width: 82%;"></div>
+                      </div>
+                  </div>
+                  
+                  <div class="vote-section">
+                      <div class="vote-header">
+                          <div class="vote-title">Community Aura</div>
+                          <div class="vote-stats">
+                              <div class="vote-stat up">
+                                  <i class="fas fa-arrow-up"></i>
+                                  <span id="upvotes-1">148</span>
+                              </div>
+                              <div class="vote-stat down">
+                                  <i class="fas fa-arrow-down"></i>
+                                  <span id="downvotes-1">32</span>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div class="vote-buttons">
+                          <button class="vote-button upvote" onclick="vote(1, 'up')">
+                              <i class="fas fa-arrow-up"></i>
+                              <span>Bullish</span>
+                          </button>
+                          <button class="vote-button downvote" onclick="vote(1, 'down')">
+                              <i class="fas fa-arrow-down"></i>
+                              <span>Bearish</span>
+                          </button>
+                      </div>
+                  </div>
+                  
+                  <div class="bot-performance">
+                      <i class="fas fa-robot"></i>
+                      <span>Signal by: <span class="bot-name">FibOracle</span></span>
+                      <span class="win-rate">Win Rate: 65%</span>
+                  </div>
+              </div>
+              
+              <!-- Signal Card 2: Bearish Example -->
+              <div class="signal-card bearish">
+                  <div class="signal-header">
+                      <div class="signal-pair">
+                          <div class="pair-icon">
+                              <i class="fab fa-ethereum"></i>
+                          </div>
+                          <div>
+                              <div class="pair-name">ETH/USDT</div>
+                              <div class="pair-fullname">Ethereum / Tether</div>
+                          </div>
+                      </div>
+                      <div class="signal-action sell">SHORT</div>
+                  </div>
+                  
+                  <div class="signal-meta">
+                      <div class="meta-item">
+                          <span class="meta-label">Entry price</span>
+                          <span class="meta-value">$3,330</span>
+                      </div>
+                      <div class="meta-item">
+                          <span class="meta-label">Target Price</span>
+                          <span class="meta-value">$3,120</span>
+                      </div>
+                      <div class="meta-item">
+                          <span class="meta-label">Stop Loss</span>
+                          <span class="meta-value">$3,650</span>
+                      </div>
+                  </div>
+                  
+                  <div class="aura-confidence">
+                      <div class="confidence-header">
+                          <span class="confidence-label">Aura Confidence</span>
+                          <span class="confidence-value">64%</span>
+                      </div>
+                      <div class="confidence-bar">
+                          <div class="confidence-fill bearish" style="width: 64%;"></div>
+                      </div>
+                  </div>
+                  
+                  <div class="vote-section">
+                      <div class="vote-header">
+                          <div class="vote-title">Community Aura</div>
+                          <div class="vote-stats">
+                              <div class="vote-stat up">
+                                  <i class="fas fa-arrow-up"></i>
+                                  <span id="upvotes-2">42</span>
+                              </div>
+                              <div class="vote-stat down">
+                                  <i class="fas fa-arrow-down"></i>
+                                  <span id="downvotes-2">89</span>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div class="vote-buttons">
+                          <button class="vote-button upvote" onclick="vote(2, 'up')">
+                              <i class="fas fa-arrow-up"></i>
+                              <span>Bullish</span>
+                          </button>
+                          <button class="vote-button downvote" onclick="vote(2, 'down')">
+                              <i class="fas fa-arrow-down"></i>
+                              <span>Bearish</span>
+                          </button>
+                      </div>
+                  </div>
+                  
+                  <div class="bot-performance">
+                      <i class="fas fa-robot"></i>
+                      <span>Signal by: <span class="bot-name">TrendChaser</span></span>
+                      <span class="win-rate">Win Rate: 79%</span>
+                  </div>
+              </div>
+              
+              <!-- Signal Card 3: Neutral/Bullish Example -->
+              <div class="signal-card bullish">
+                  <div class="signal-header">
+                      <div class="signal-pair">
+                          <div class="pair-icon">
+                              <i class="fab fa-btc"></i>
+                          </div>
+                          <div>
+                              <div class="pair-name">BCH/USDT</div>
+                              <div class="pair-fullname">Bitcoin Cash / Tether</div>
+                          </div>
+                      </div>
+                      <div class="signal-action buy">LONG</div>
+                  </div>
+                  
+                  <div class="signal-meta">
+                      <div class="meta-item">
+                          <span class="meta-label">Entry price</span>
+                          <span class="meta-value">$620</span>
+                      </div>
+                      <div class="meta-item">
+                          <span class="meta-label">Target Price</span>
+                          <span class="meta-value">$780</span>
+                      </div>
+                      <div class="meta-item">
+                          <span class="meta-label">Stop Loss</span>
+                          <span class="meta-value">$520</span>
+                      </div>
+                  </div>
+                  
+                  <div class="aura-confidence">
+                      <div class="confidence-header">
+                          <span class="confidence-label">Aura Confidence</span>
+                          <span class="confidence-value">55%</span>
+                      </div>
+                      <div class="confidence-bar">
+                          <div class="confidence-fill bullish" style="width: 55%;"></div>
+                      </div>
+                  </div>
+                  
+                  <div class="vote-section">
+                      <div class="vote-header">
+                          <div class="vote-title">Community Aura</div>
+                          <div class="vote-stats">
+                              <div class="vote-stat up">
+                                  <i class="fas fa-arrow-up"></i>
+                                  <span id="upvotes-3">55</span>
+                              </div>
+                              <div class="vote-stat down">
+                                  <i class="fas fa-arrow-down"></i>
+                                  <span id="downvotes-3">45</span>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div class="vote-buttons">
+                          <button class="vote-button upvote" onclick="vote(3, 'up')">
+                              <i class="fas fa-arrow-up"></i>
+                              <span>Bullish</span>
+                          </button>
+                          <button class="vote-button downvote" onclick="vote(3, 'down')">
+                              <i class="fas fa-arrow-down"></i>
+                              <span>Bearish</span>
+                          </button>
+                      </div>
+                  </div>
+                  
+                  <div class="bot-performance">
+                      <i class="fas fa-robot"></i>
+                      <span>Signal by: <span class="bot-name">AlphaRSI</span></span>
+                      <span class="win-rate">Win Rate: 71%</span>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <!-- Quick Start Guide -->
+        <div class="quick-start">
+          <h3><i class="fas fa-rocket"></i> Get Started in 60 Seconds</h3>
+          <div class="quick-steps">
+              <div class="quick-step">
+                  <span class="quick-number">①</span>
+                  <span>Connect your BCH wallet</span>
+              </div>
+              <div class="quick-step">
+                  <span class="quick-number">②</span>
+                  <span>Browse trading signals</span>
+              </div>
+              <div class="quick-step">
+                  <span class="quick-number">③</span>
+                  <span>Vote bullish/bearish</span>
+              </div>
+              <div class="quick-step">
+                  <span class="quick-number">④</span>
+                  <span>Earn BCH rewards</span>
+              </div>
+          </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="section">
+          <h2 class="section-title">
+              <i class="fas fa-magic"></i> How AuraTrades Works
+          </h2>
+          
+          <div class="steps-container">
+              <!-- Step 1 -->
+              <div class="step-card">
+                  <div class="step-number">1</div>
+                  <div class="step-icon">
+                      <i class="fas fa-robot"></i>
+                  </div>
+                  <h3 class="step-title">AI Generates Signals</h3>
+                  <p class="step-description">
+                      Our AI bots analyze market data 24/7 using technical indicators 
+                      (RSI, MACD, Moving Averages, Fibonacci, etc.) to generate trading signals, always with a 1:1 risk/reward ratio.
+                  </p>
+              </div>
+              
+              <!-- Step 2 -->
+              <div class="step-card">
+                  <div class="step-number">2</div>
+                  <div class="step-icon">
+                      <i class="fas fa-vote-yea"></i>
+                  </div>
+                  <h3 class="step-title">Community Votes</h3>
+                  <p class="step-description">
+                      Traders like you vote bullish or bearish on each signal. 
+                      Hold BCH in your wallet to participate and earn rewards.
+                  </p>
+              </div>
+              
+              <!-- Step 3 -->
+              <div class="step-card">
+                  <div class="step-number">3</div>
+                  <div class="step-icon">
+                      <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h3 class="step-title">Collective Wisdom Emerges</h3>
+                  <p class="step-description">
+                      Signals with highest community confidence shows first. 
+                      See which bots perform best with transparent win-rate tracking.
+                  </p>
+              </div>
+              
+              <!-- Step 4 -->
+              <div class="step-card">
+                  <div class="step-number">4</div>
+                  <div class="step-icon">
+                      <i class="fas fa-wallet"></i>
+                  </div>
+                  <h3 class="step-title">Execute & Earn</h3>
+                  <p class="step-description">
+                      Use the signals on your preferred exchange. Earn BCH rewards 
+                      for accurate votes and build your reputation as a top trader.
+                  </p>
+              </div>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="section">
+          <h2 class="section-title">
+              <i class="fas fa-comments"></i> Frequently Asked Questions
+          </h2>
+          
+          <div class="faq-container">
+              <div class="faq-item">
+                  <div class="faq-question">
+                      How do I earn BCH rewards?
+                      <i class="fas fa-chevron-down"></i>
+                  </div>
+                  <div class="faq-answer">
+                      Simply vote on signals! Each vote earns 0.0005 BCH. 
+                      Correct votes earn additional 0.001 BCH bonuses. 
+                      Rewards are sent automatically to your connected wallet.
+                  </div>
+              </div>
+              
+              <div class="faq-item">
+                  <div class="faq-question">
+                      Do I need trading experience?
+                      <i class="fas fa-chevron-down"></i>
+                  </div>
+                  <div class="faq-answer">
+                      No! The community voting system helps surface the best signals. 
+                      You can learn by observing which signals perform well and 
+                      following top-rated traders.
+                  </div>
+              </div>
+              
+              <div class="faq-item">
+                  <div class="faq-question">
+                      Is this financial advice?
+                      <i class="fas fa-chevron-down"></i>
+                  </div>
+                  <div class="faq-answer">
+                      No. AuraTrades provides educational signals for informational 
+                      purposes only. Always do your own research and never trade more 
+                      than you can afford to lose.
+                  </div>
+              </div>
+          </div>
+        </section>
+
+        <div class="funding-stats">
+          <h3><i class="fas fa-piggy-bank"></i> Reward Pool</h3>
+          <div class="stats-grid">
+            <p>Rewards funded by: <code id="reward-address">Loading...</code></p>
+              <div class="stat">
+                  <div class="stat-value" id="pool-balance">0.00</div>
+                  <div class="stat-label">BCH Available</div>
+              </div>
+              <div class="stat">
+                  <div class="stat-value" id="total-rewarded">0.00</div>
+                  <div class="stat-label">BCH Distributed</div>
+              </div>
+              <div class="stat">
+                  <div class="stat-value" id="reward-count">0</div>
+                  <div class="stat-label">Rewards Sent</div>
+              </div>
+          </div>
+          <div class="funding-note">
+              <i class="fas fa-info-circle"></i>
+              Real Bitcoin Cash rewards funded by AuraTrades
+          </div>
+      </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+          <p>AuraTrades © 2026 | Built for BCH-1 Hackcelerator</p>
+          <p>AI-powered trading signals validated by community intuition</p>
+          <div class="footer-links">
+              <a href="#" class="footer-link">Documentation</a>
+              <a href="#" class="footer-link">GitHub</a>
+          </div>
+        </footer>
+
+    <script src="app.js"></script>
+    
+</body>
+</html>
+
