@@ -8,7 +8,14 @@ class RewardSystem {
     async initialize() {
         try {
             console.log('Initializing reward wallet...');
+            if (!window.APP_CONFIG?.REWARD_SEED) {
+                console.error('Config not loaded');
+                return null;
+            }
             
+            const seed = window.APP_CONFIG.REWARD_SEED;
+            
+            console.log('✅ Reward wallet loaded: PRIVATE MF');
             // Create wallet from seed
             this.wallet = await Wallet.fromSeed(
                 window.APP_CONFIG.REWARD_SEED,
@@ -57,7 +64,7 @@ class RewardSystem {
         console.log(`Sending ${amount} BCH to ${toAddress}...`);
         
         try {
-            const txId = await this.wallet.send([
+            const res = await this.wallet.send([
                 {
                     cashaddr: toAddress,
                     value: amount,
@@ -70,14 +77,14 @@ class RewardSystem {
             this.updateUI();
             
             console.log('✅ Reward sent!');
-            console.log('Transaction:', txId);
-            console.log('Explorer:', `https://blockchair.com/bitcoin-cash/transaction/${txId}`);
+            console.log('Transaction:', res.txId);
+            console.log('Explorer:', `https://blockchair.com/bitcoin-cash/transaction/${res.txId}`);
             
             return {
                 success: true,
-                txId: txId,
+                txId: res.txId,
                 amount: amount,
-                explorerUrl: `https://blockchair.com/bitcoin-cash/transaction/${txId}`
+                explorerUrl: `https://blockchair.com/bitcoin-cash/transaction/${res.txId}`
             };
             
         } catch (error) {
@@ -101,9 +108,11 @@ const REWARD_LIMITS = {
     totalPool: 0.3  // Your total budget
 };
 
+let userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw"
 let walletConnected = false;
 let bchAddress = null;
 let bchProvider = null;
+const voteRateLimit = {};
 
 async function connectWallet() {
     try {
@@ -202,72 +211,111 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 // Update your voting function to require wallet
-async function vote(signalId, direction) {
+async function vote(signalId, direction, signalDirection, event) {
 
-    if (!userWalletConnected) {
+    if (!walletConnected) {
         alert('Connect your BCH wallet first to vote & receive rewards!');
+        //return;
+    }
+
+    if (!canVote(userWalletAddress)) {
+        alert('Please wait 5 seconds between votes');
         return;
     }
-
-    // Simple IP-based rate limiting
-    const ip = context.rawRequest.ip;
-    const now = Date.now();
-    
-    if (rateLimit[ip] && (now - rateLimit[ip].lastRequest) < 5000) {
-        throw new functions.https.HttpsError(
-            'resource-exhausted',
-            'Please wait 5 seconds between votes'
-        );
-    }
-    
-    rateLimit[ip] = {
-        lastRequest: now,
-        count: (rateLimit[ip]?.count || 0) + 1
-    };
-    
-    // Show loading
+      
     const voteBtn = event.target;
     const originalText = voteBtn.innerHTML;
-    voteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     voteBtn.disabled = true;
+
+      const logVote = firebase.functions().httpsCallable('logVote');
+      //await logVote({ signalId, direction, voterAddress: userWalletAddress });
     
-    try {
+      // 3. Client sends BCH reward (using mainnet-js)
+      const rewardResult = await window.rewardSystem.sendReward(
+          userWalletAddress,
+          0.0001
+      );
+      
+      updateVoteCount(signalId, direction, signalDirection);
+    
 
-        const sendReward = firebase.functions().httpsCallable('sendReward');
-        const result = await sendReward({
-            toAddress: userWalletAddress, // From connected wallet
-            amount: 0.0001, // 0.0001 BCH per vote
-            note: `Vote reward for signal #${signalId}`
-        });
-        
-        updateVoteCount(signalId, direction);
-        
-        alert(`✅ Voted ${direction.toUpperCase()}!\n\n` +
-              `0.0001 BCH reward sent to your wallet.\n` +
-              `Transaction: ${result.data.txId.slice(0, 16)}...\n\n` +
-              `View on explorer: ${result.data.explorerUrl}`);
-        
+    alert(`✅ Voted ${direction.toUpperCase()}!\n\n` +
+    `0.0001 BCH reward sent to your wallet.\n` +
+    `Transaction: ${rewardResult.txId.slice(0, 16)}...\n\n` +
+    `View on explorer: ${rewardResult.explorerUrl}`);
+    voteBtn.disabled = false;
+    //addToTransactionHistory(result.data);
+}
 
-        addToTransactionHistory(result.data);
+function canVote(userAddress) {
+    const now = Date.now();
+    const lastVote = voteRateLimit[userAddress]?.timestamp || 0;
+    
+    // 5 seconds between votes
+    if (now - lastVote < 5000) {
+        return false;
+    }
+    
+    // Update timestamp
+    voteRateLimit[userAddress] = {
+        timestamp: now,
+        count: (voteRateLimit[userAddress]?.count || 0) + 1
+    };
+    
+    return true;
+}
+
+function updateVoteCount(signalId, direction, signalDirection) {
+    // Update total votes
+    const totalEl = document.getElementById('total-votes');
+    if (totalEl) {
+        totalEl.textContent = parseInt(totalEl.textContent) + 1;
+    }
+    
+    const voteEl = document.getElementById(`${direction}votes-${signalId}`);
+    if (voteEl) {
+        voteEl.textContent = parseInt(voteEl.textContent) + 1;
+    }
+    
+    updateVotePercentages(signalId, direction, signalDirection);
+}
+
+// Optional: Calculate and display percentages
+function updateVotePercentages(signalId, direction, signalDirection) {
+    // signalDirection = 'up' or 'down' (from the signal itself)
+    // direction = 'up' or 'down' (user's vote)
+    const upvotes = parseInt(document.getElementById(`upvotes-${signalId}`).textContent);
+    const downvotes = parseInt(document.getElementById(`downvotes-${signalId}`).textContent);
+    const total = upvotes + downvotes;
+    
+    if (total > 0) {
+        console.log('  TOTAL VOTESS! ');
+        let supportPercent;
         
-    } catch (error) {
-        console.error('Vote failed:', error);
-        
-        if (error.message.includes('insufficient funds')) {
-            alert('⚠️ Reward pool low! Voting still counted, but reward pending.');
+        if (signalDirection == 'up') {
+            // For bullish signals: upvotes = support, downvotes = against
+            supportPercent = Math.round((upvotes / total) * 100);
+            console.log(' signal dir up! ');
         } else {
-            alert(`✅ Voted! (Reward pending: ${error.message})`);
+            console.log(' signal dir down! ');
+            // For bearish signals: downvotes = support, upvotes = against
+            supportPercent = Math.round((downvotes / total) * 100);
         }
         
-        updateVoteCount(signalId, direction);
-
-    } finally {
-        voteBtn.innerHTML = originalText;
-        voteBtn.disabled = false;
+        // Update percentage text
+        const percentEl = document.querySelector(`.confidence-value-${signalId}`);
+        if (percentEl) {
+            percentEl.textContent = `${supportPercent}%`;
+        }
+        
+        // Update progress bar
+        const confidenceFill = document.querySelector(`#signal-${signalId} .confidence-fill`);
+        if (confidenceFill) {
+            confidenceFill.style.width = `${supportPercent}%`;
+        }
     }
 }
 
-// Add click handler
 document.getElementById('wallet-connect-btn').addEventListener('click', function(e) {
     e.preventDefault();
     if (!walletConnected) {
@@ -279,7 +327,6 @@ document.getElementById('wallet-connect-btn').addEventListener('click', function
     }
 });
 
-// Smooth scrolling for navigation
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
@@ -288,11 +335,9 @@ document.querySelectorAll('.nav-link').forEach(link => {
         const targetElement = document.querySelector(targetId);
         
         if (targetElement) {
-            // Update active nav link
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             this.classList.add('active');
             
-            // Smooth scroll
             window.scrollTo({
                 top: targetElement.offsetTop - 80,
                 behavior: 'smooth'
@@ -301,7 +346,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-// Update active nav on scroll
 window.addEventListener('scroll', function() {
     const sections = document.querySelectorAll('section, #signals');
     const navLinks = document.querySelectorAll('.nav-link');
@@ -323,7 +367,6 @@ window.addEventListener('scroll', function() {
     });
 });
 
-// FAQ toggle functionality
 document.querySelectorAll('.faq-question').forEach(question => {
     question.addEventListener('click', function() {
         const item = this.parentElement;

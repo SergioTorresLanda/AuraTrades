@@ -68,7 +68,7 @@
                 <div class="stat-label">Live Signals</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value" id="total-votes">33</div>
+                <div class="stat-value" id="total-votes">0</div>
                 <div class="stat-label">Total Votes</div>
             </div>
             <div class="stat-item">
@@ -85,7 +85,7 @@
         <div id="signals">
           <div class="signals-grid">
               <!-- Signal Card 1: Bullish Example -->
-              <div class="signal-card bullish">
+              <div class="signal-card bullish" id="signal-1">
                   <div class="signal-header">
                       <div class="signal-pair">
                           <div class="pair-icon">
@@ -117,10 +117,10 @@
                   <div class="aura-confidence">
                       <div class="confidence-header">
                           <span class="confidence-label">Aura Confidence</span>
-                          <span class="confidence-value">82%</span>
+                          <span class="confidence-value-1">0%</span>
                       </div>
-                      <div class="confidence-bar">
-                          <div class="confidence-fill bullish" style="width: 82%;"></div>
+                      <div class="confidence-bar" id="confidence-bar-1">
+                          <div class="confidence-fill bullish" style="width: 0%;"></div>
                       </div>
                   </div>
                   
@@ -130,21 +130,21 @@
                           <div class="vote-stats">
                               <div class="vote-stat up">
                                   <i class="fas fa-arrow-up"></i>
-                                  <span id="upvotes-1">148</span>
+                                  <span id="upvotes-1">0</span>
                               </div>
                               <div class="vote-stat down">
                                   <i class="fas fa-arrow-down"></i>
-                                  <span id="downvotes-1">32</span>
+                                  <span id="downvotes-1">0</span>
                               </div>
                           </div>
                       </div>
                       
                       <div class="vote-buttons">
-                          <button class="vote-button upvote" onclick="vote(1, 'up')">
+                          <button class="vote-button upvote" onclick="vote(1, 'up', 'up', event)">
                               <i class="fas fa-arrow-up"></i>
                               <span>Bullish</span>
                           </button>
-                          <button class="vote-button downvote" onclick="vote(1, 'down')">
+                          <button class="vote-button downvote" onclick="vote(1, 'down', 'up', event)">
                               <i class="fas fa-arrow-down"></i>
                               <span>Bearish</span>
                           </button>
@@ -159,7 +159,7 @@
               </div>
               
               <!-- Signal Card 2: Bearish Example -->
-              <div class="signal-card bearish">
+              <div class="signal-card bearish" id="signal-2">
                   <div class="signal-header">
                       <div class="signal-pair">
                           <div class="pair-icon">
@@ -191,10 +191,10 @@
                   <div class="aura-confidence">
                       <div class="confidence-header">
                           <span class="confidence-label">Aura Confidence</span>
-                          <span class="confidence-value">64%</span>
+                          <span class="confidence-value-2">0%</span>
                       </div>
-                      <div class="confidence-bar">
-                          <div class="confidence-fill bearish" style="width: 64%;"></div>
+                      <div class="confidence-bar" id="confidence-bar-2">
+                          <div class="confidence-fill bearish" style="width: 0%;"></div>
                       </div>
                   </div>
                   
@@ -204,21 +204,21 @@
                           <div class="vote-stats">
                               <div class="vote-stat up">
                                   <i class="fas fa-arrow-up"></i>
-                                  <span id="upvotes-2">42</span>
+                                  <span id="upvotes-2">0</span>
                               </div>
                               <div class="vote-stat down">
                                   <i class="fas fa-arrow-down"></i>
-                                  <span id="downvotes-2">89</span>
+                                  <span id="downvotes-2">0</span>
                               </div>
                           </div>
                       </div>
                       
                       <div class="vote-buttons">
-                          <button class="vote-button upvote" onclick="vote(2, 'up')">
+                          <button class="vote-button upvote" onclick="vote(2, 'up', 'down', event)">
                               <i class="fas fa-arrow-up"></i>
                               <span>Bullish</span>
                           </button>
-                          <button class="vote-button downvote" onclick="vote(2, 'down')">
+                          <button class="vote-button downvote" onclick="vote(2, 'down', 'down', event)">
                               <i class="fas fa-arrow-down"></i>
                               <span>Bearish</span>
                           </button>
@@ -233,7 +233,7 @@
               </div>
               
               <!-- Signal Card 3: Neutral/Bullish Example -->
-              <div class="signal-card bullish">
+              <div class="signal-card bullish" id="signal-3">
                   <div class="signal-header">
                       <div class="signal-pair">
                           <div class="pair-icon">
@@ -265,10 +265,10 @@
                   <div class="aura-confidence">
                       <div class="confidence-header">
                           <span class="confidence-label">Aura Confidence</span>
-                          <span class="confidence-value">55%</span>
+                          <span class="confidence-value-3">0%</span>
                       </div>
-                      <div class="confidence-bar">
-                          <div class="confidence-fill bullish" style="width: 55%;"></div>
+                      <div class="confidence-bar" id="confidence-bar-3">
+                          <div class="confidence-fill bullish" style="width: 0%;"></div>
                       </div>
                   </div>
                   
@@ -278,21 +278,21 @@
                           <div class="vote-stats">
                               <div class="vote-stat up">
                                   <i class="fas fa-arrow-up"></i>
-                                  <span id="upvotes-3">55</span>
+                                  <span id="upvotes-3">0</span>
                               </div>
                               <div class="vote-stat down">
                                   <i class="fas fa-arrow-down"></i>
-                                  <span id="downvotes-3">45</span>
+                                  <span id="downvotes-3">0</span>
                               </div>
                           </div>
                       </div>
                       
                       <div class="vote-buttons">
-                          <button class="vote-button upvote" onclick="vote(3, 'up')">
+                          <button class="vote-button upvote" onclick="vote(3, 'up', 'up', event)">
                               <i class="fas fa-arrow-up"></i>
                               <span>Bullish</span>
                           </button>
-                          <button class="vote-button downvote" onclick="vote(3, 'down')">
+                          <button class="vote-button downvote" onclick="vote(3, 'down', 'up', event)">
                               <i class="fas fa-arrow-down"></i>
                               <span>Bearish</span>
                           </button>
@@ -470,6 +470,7 @@
           </div>
         </footer>
 
+    <script src="config.js"></script>
     <script src="app.js"></script>
     
 </body>
