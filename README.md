@@ -64,7 +64,7 @@ Reward Structure:
 * Accuracy Bonus: 0.001 BCH for correct predictions (≈ $0.60)
 * Referral Bonus: 10% of referred user rewards
 
-## 7.Tech Stack
+## 7. Tech Stack
 * Frontend: React/Next.js + AuraTrades Design System
 * Blockchain: Bitcoin Cash + mainnet-js SDK
 * AI/ML: TensorFlow + proprietary signal algorithms
