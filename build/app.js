@@ -110,68 +110,99 @@ const REWARD_LIMITS = {
 
 let userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw"
 let walletConnected = false;
-let bchAddress = null;
 let bchProvider = null;
 const voteRateLimit = {};
 
 async function connectWallet() {
+
     try {
 
         if (!window.Wallet || !window.Mainnet) {
             alert('Please wait for wallet library to load...');
             return;
         }
+
         // CREATE A NEW WALLET 
-        // For demo - users get their own
-        //const wallet = await Mainnet.TestNetWallet.newRandom();
-        //const address = wallet.address;
+        const wallet = await Wallet.newRandom();
+           // Get address asynchronously
+        //userWalletAddress = await wallet.cashaddr
         
-        // For mainnet (real BCH) use:
-        const wallet = await Mainnet.Wallet.newRandom();
-        
-        console.log('Wallet created:', wallet);
-        console.log('Address:', address);
-        console.log('Private key (WIF):', wallet.privateKeyWif);
-        
+        console.log('Wallet address:', userWalletAddress);
+        localStorage.setItem('aura_wallet_address', userWalletAddress);
         // Update UI
         walletConnected = true;
-        bchAddress = address;
+        localStorage.setItem('aura_wallet', userWalletAddress);
+        // Show IMPORTANT backup warning
+        showBackupWarning(wallet.mnemonic);
+
         updateWalletUI();
-        localStorage.setItem('aura_wallet', address);
-        localStorage.setItem('aura_wallet_wif', wallet.privateKeyWif); // Store securely!
-        
-        // Show success
-        alert(`✅ Wallet connected!\nAddress: ${address}\n\nIMPORTANT: Save your private key!`);
-        
-        //We can now use this wallet for transactions
-        return wallet;
-        
+                
     } catch (error) {
-        console.error('Wallet connection failed:', error);
+        walletConnected = false;
+        console.error('Wallet creation failed:', error);
         alert('❌ Error creating wallet: ' + error.message);
     }
+}
+
+function showBackupWarning(seed) {
+    // Create secure modal that disappears after viewing
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.9); z-index: 99999;
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-family: monospace; text-align: center;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: #1a1a2e; padding: 30px; border-radius: 15px; max-width: 500px;">
+            <h2 style="color: #00D4FF;">⚠️ BACKUP YOUR WALLET</h2>
+            <p>This is a NEW wallet. Save this information NOW:</p>
+            <div style="background: #0a0a0f; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p><strong>Address:</strong><br>${userWalletAddress}</p>
+                <p><strong>Seed Phrase (12 words):</strong><br>${seed}</p>
+            </div>
+            <p style="color: #FF4D7D; font-size: 14px;">
+                ⚠️ If you lose this, you lose access to your BCH rewards!
+            </p>
+            <button onclick="this.parentElement.parentElement.remove()" 
+                    style="background: #7B3FE4; color: white; border: none; 
+                           padding: 10px 30px; border-radius: 8px; cursor: pointer; margin-top: 15px;">
+                I've saved it securely
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Auto-remove after 60 seconds
+    setTimeout(() => {
+        if (modal.parentElement) {
+            modal.remove();
+        }
+    }, 60000);
 }
 
 function updateWalletUI() {
     const btn = document.getElementById('wallet-connect-btn');
     const icon = btn.querySelector('i');
     
-    if (walletConnected && bchAddress) {
+    if (walletConnected && userWalletAddress) {
 
         icon.className = 'fas fa-check-circle';
-        btn.innerHTML = `<i class="fas fa-check-circle"></i> ${bchAddress.slice(0,6)}...${bchAddress.slice(-4)}`;
+        btn.innerHTML = "Disconnect"//`<i class="fas fa-check-circle"></i> ${userWalletAddress.slice(0,6)}...${userWalletAddress.slice(-4)}`;
         btn.style.background = 'linear-gradient(135deg, #00FF9D, #00D4FF)';
         btn.style.color = '#0A0A0F';
         btn.style.fontWeight = 'bold';        
         // Remove click handler (already connected)
-        btn.onclick = null;
-        btn.href = '#';
+        //btn.onclick = null;
+        //btn.href = '#';
     }
 }
 
 function disconnectWallet() {
     walletConnected = false;
-    bchAddress = null;
+    userWalletAddress = null;
     bchProvider = null;
     localStorage.removeItem('aura_wallet');
     location.reload(); // Simple refresh to reset
@@ -214,8 +245,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function vote(signalId, direction, signalDirection, event) {
 
     if (!walletConnected) {
-        alert('Connect your BCH wallet first to vote & receive rewards!');
-        //return;
+        alert('Create or connect your BCH wallet first to vote & receive rewards!');
+        return;
     }
 
     if (!canVote(userWalletAddress)) {
@@ -227,7 +258,6 @@ async function vote(signalId, direction, signalDirection, event) {
     const originalText = voteBtn.innerHTML;
     voteBtn.disabled = true;
 
-      const logVote = firebase.functions().httpsCallable('logVote');
       //await logVote({ signalId, direction, voterAddress: userWalletAddress });
     
       // 3. Client sends BCH reward (using mainnet-js)
@@ -235,17 +265,45 @@ async function vote(signalId, direction, signalDirection, event) {
           userWalletAddress,
           0.0001
       );
+
+      //if (rewardResult.success) {
+    await logVoteReward(
+        //userWalletAddress,
+        //0.0001,
+        signalId,
+        direction,
+        signalDirection
+    );
+    //}
       
       updateVoteCount(signalId, direction, signalDirection);
     
 
     alert(`✅ Voted ${direction.toUpperCase()}!\n\n` +
     `0.0001 BCH reward sent to your wallet.\n` +
-    `Transaction: ${rewardResult.txId.slice(0, 16)}...\n\n` +
+    `Transaction: ${rewardResult.txId}\n` +
     `View on explorer: ${rewardResult.explorerUrl}`);
     voteBtn.disabled = false;
     //addToTransactionHistory(result.data);
 }
+
+async function logVoteReward(signalId, direction, signalDirection) {
+    try {
+        const logReward = firebase.functions().httpsCallable('logReward');
+        await logReward({
+         //   toAddress: toAddress,
+           // amount: amount,
+            signalId: signalId,
+            follows: direction == signalDirection
+        });
+        console.log('Reward logged to analytics');
+    } catch (error) {
+        console.log('Analytics logging failed:', error);
+        // Don't fail the vote if logging fails
+    }
+}
+
+
 
 function canVote(userAddress) {
     const now = Date.now();
@@ -289,7 +347,6 @@ function updateVotePercentages(signalId, direction, signalDirection) {
     const total = upvotes + downvotes;
     
     if (total > 0) {
-        console.log('  TOTAL VOTESS! ');
         let supportPercent;
         
         if (signalDirection == 'up') {
@@ -326,16 +383,18 @@ document.getElementById('wallet-connect-btn').addEventListener('click', function
         }
     }
 });
-
-document.querySelectorAll('.nav-link').forEach(link => {
+/*
+document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
     link.addEventListener('click', function(e) {
+       
         e.preventDefault();
         
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         
         if (targetElement) {
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-link[href^="#"]').forEach(l => 
+                l.classList.remove('active'));
             this.classList.add('active');
             
             window.scrollTo({
@@ -345,17 +404,19 @@ document.querySelectorAll('.nav-link').forEach(link => {
         }
     });
 });
-
+*/
+/*
 window.addEventListener('scroll', function() {
-    const sections = document.querySelectorAll('section, #signals');
-    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+
     
     let current = '';
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
-        if (scrollY >= sectionTop - 100) {
-            current = section.getAttribute('id');
+        if (scrollY >= sectionTop - 150) {
+            current = section.id
         }
     });
     
@@ -373,3 +434,4 @@ document.querySelectorAll('.faq-question').forEach(question => {
         item.classList.toggle('active');
     });
 });
+*/
