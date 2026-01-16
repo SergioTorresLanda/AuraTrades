@@ -26,9 +26,9 @@ AuraTrades is a community-validated AI trading signal platform built on Bitcoin
 
 ## 3. The Solution
 A three-layer system:
-1. AI Signal Generation: Multiple specialized bots analyzing markets 24/7
-2. Community Validation: Traders vote on signals using BCH holdings as stake
-3. Incentive Economy: Real BCH rewards for participation and accuracy
+1. AI Signal Generation: Multiple specialized bots analyzing markets 24/7
+2. Community Validation: Traders vote on signals to surface most reliable ones
+3. Incentive Economy: Real BCH rewards for participation and accuracy
 
 ## 4. Market Opportunity
 * Target Market: 300M+ cryptocurrency traders worldwide
@@ -40,7 +40,6 @@ A three-layer system:
 Phase 1: Community Building (Months 1-3)
 * Funding: Founder capital + hackathon grants
 * Revenue: None (growth focus)
-* Rewards: 0.0001 BCH per vote + 0.001 BCH for accuracy
 * Goal: 1,000 active users, 10,000 daily votes
 
 Phase 2: Premium Access (Months 4-6)
@@ -79,18 +78,21 @@ Q1 2026 (MVP Launch)
 * Transparent transaction history
 * User profiles & leaderboards
 * Mobile-responsive design
+
 Q2 2026 (Growth)
 * Premium signal tiers
 * Advanced AI models (LSTM/Transformer)
 * Social features & communities
 * API v1 for developers
 * Mobile applications
+
 Q3 2026 (Monetization)
 * AuraTrades Fund launch
 * Prediction markets
 * Institutional API
 * Multi-language support
 * Advanced analytics dashboard
+
 Q4 2026 (Scale)
 * Cross-chain signal expansion
 * Educational platform
