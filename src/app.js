@@ -1,9 +1,9 @@
 import { functions, httpsCallable } from './firebase.js';
 
 const REWARD_LIMITS = {
-    perHour: 0.001, // Max 0.001 BCH/hour per user
-    perDay: 0.01,   // Max 0.01 BCH/day per user
-    totalPool: 0.3  // Your total budget
+    perHour: 0.001,
+    perDay: 0.01,
+    totalPool: 0.3 
 };
 
 let userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw"
