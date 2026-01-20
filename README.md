@@ -108,4 +108,4 @@ Advisor: Seeking - Crypto compliance expert
 Contact: [sergio.torreslanda@gmail.com/ +52 9545407746]
 Website: https://auratrades.web.app
 GitHub: https://github.com/yourusername/auratrades
-Twitter: @ATrades31070
+Twitter: @AuraTradesBCH
