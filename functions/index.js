@@ -4,24 +4,23 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
 
-exports.logReward = functions.https.onCall(async (data, context) => {
-    
-    console.log('logReward called with:', data);
-    console.log('Context IP:', context.rawRequest?.ip);
+
+exports.logReward = functions.https.onCall(async (request) => {
+    const data = request.data;
+    console.log('logReward called with:', data); //log not showing up in browser console 
     
     // Validate required fields
-    if (!data.follows || !data.signalId) {
-        /*throw new functions.https.HttpsError(
+    if (!data.signalId) {
+        throw new functions.https.HttpsError( //throwing here
             'invalid-argument',
             'Missing required fields: signalId, follows'
-        );*/
+        );
     }
     
     try {
         await db.collection('rewards').add({
-            signalId: data.signalId || 'unknown',
-            follows: data.follows || false,
-            ip: context.rawRequest?.ip || 'unknown'
+            signalId: data.signalId,
+            follows: data.follows
         });
         
         console.log('Successfully logged reward');
