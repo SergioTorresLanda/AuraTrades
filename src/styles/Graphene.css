@@ -1,0 +1,310 @@
+.graphene-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .graphene-modal {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .graphene-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10001;
+  }
+  
+  .graphene-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+  
+  .graphene-header {
+    text-align: center;
+    padding: 40px 40px 20px;
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .graphene-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  
+  .gem-icon {
+    display: inline-block;
+    margin: 0 15px;
+    animation: pulse 2s infinite;
+  }
+  
+  .graphene-subtitlex {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  .section-subtitle {
+    color: #c7d0dd;
+    font-size: 1rem;
+    font-style: italic;
+    padding-left: 15px;
+  }
+  
+  .graphene-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px 40px;
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .graphene-nav-btn {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .graphene-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .graphene-nav-btn.active {
+    background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  
+  .graphene-content {
+    padding: 40px;
+  }
+  
+  .section-header {
+    margin-bottom: 30px;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .section-number {
+    color: #60a5fa;
+    margin-right: 10px;
+    font-weight: 700;
+  }
+  
+  .section-body {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .section-main-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #e2e8f0;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .protocol-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+  
+  .protocol-point {
+    color: #cbd5e1;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    padding-left: 30px;
+    position: relative;
+    font-size: 1rem;
+  }
+  
+  .point-icon {
+    position: absolute;
+    left: 0;
+    top: 6px;
+    color: #60a5fa;
+    font-size: 0.8rem;
+  }
+  
+  .section-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-arrow {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .nav-arrow:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+    transform: translateY(-2px);
+  }
+  
+  .nav-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .section-indicator {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .indicator-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .indicator-dot:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .indicator-dot.active {
+    background: #60a5fa;
+    transform: scale(1.2);
+  }
+  
+  .graphene-footer {
+    padding: 20px 40px;
+    background: rgba(220, 38, 38, 0.1);
+    border-top: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 0 0 16px 16px;
+  }
+  
+  .protocol-disclaimer {
+    color: #fecaca;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .protocol-disclaimer i {
+    color: #f87171;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  @media (max-width: 768px) {
+    .graphene-modal {
+      width: 95%;
+      max-height: 95vh;
+    }
+    
+    .graphene-title {
+      font-size: 1.8rem;
+    }
+    
+    .graphene-nav {
+      padding: 15px;
+      justify-content: center;
+    }
+    
+    .graphene-content {
+      padding: 20px;
+    }
+    
+    .section-title {
+      font-size: 1.4rem;
+    }
+    
+    .section-navigation {
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+
+  
