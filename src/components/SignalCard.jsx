@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { useReward } from '../contexts/BCHContext'
 import { vote } from '../app.js'
+import btcIcon from '../assets/btc.png'
+import ethIcon from '../assets/eth.png'
+import bchIcon from '../assets/bch.png'
+import xrpIcon from '../assets/xrp.png'
+import solIcon from '../assets/sol.png' 
+import adaIcon from '../assets/ada.png'
+import dogeIcon from '../assets/doge.png' 
 
 function SignalCard({ 
   id = 1,
@@ -60,12 +67,28 @@ function SignalCard({
   }
 
   // Determine icon based on pair
+  const CRYPTO_ICONS = {
+    btc: btcIcon,
+    eth: ethIcon,
+    bch: bchIcon,
+    xrp: xrpIcon,
+    sol: solIcon,
+    ada: adaIcon,  // if you have more
+    doge: dogeIcon
+  }
+  
+  // Then in component
   const getPairIcon = () => {
     const pairLower = pair.toLowerCase()
-    if (pairLower.includes('btc')) return 'fab fa-bitcoin'
-    if (pairLower.includes('eth')) return 'fab fa-ethereum'
-    if (pairLower.includes('bch')) return 'fas fa-btc'
-    return 'fas fa-chart-line'
+    
+    // Find first matching crypto in the pair
+    for (const [crypto, icon] of Object.entries(CRYPTO_ICONS)) {
+      if (pairLower.includes(crypto)) {
+        return icon
+      }
+    }
+    
+    return defaultIcon
   }
 
   return (
@@ -73,7 +96,17 @@ function SignalCard({
       <div className="signal-header">
         <div className="signal-pair">
           <div className="pair-icon">
-            <i className={getPairIcon()}></i>
+              <img 
+                src={getPairIcon()} 
+                alt={`${pair} icon`}
+                className="crypto-icon"
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  const fallbackIcon = document.createElement('i')
+                  fallbackIcon.className = 'fas fa-chart-line'
+                  e.target.parentNode.appendChild(fallbackIcon)
+                }}
+              />
           </div>
           <div>
             <div className="pair-name">{pair}</div>
