@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import graphIcon from '../assets/graph.png'
 import '../styles/Graphene.css';
 
 const GrapheneProtocol = ({ onClose }) => {
@@ -72,12 +73,20 @@ const GrapheneProtocol = ({ onClose }) => {
         
         <div className="graphene-header">
           <h1 className="graphene-title">
-            <span className="gem-icon">💎</span>
+          <img 
+            src={graphIcon} 
+            alt="Graph icon" 
+            className="title-icon left-icon"
+          />
             The Graphene Protocol
-            <span className="gem-icon">💎</span>
+            <img 
+              src={graphIcon} 
+              alt="Graph icon" 
+              className="title-icon right-icon"
+            />
           </h1>
           <p className="graphene-subtitle">
-          The Graphene Protocol: The Blueprint for Unbreakable Trading
+          The Blueprint for Unbreakable Trading
           </p>
         </div>
 
@@ -95,11 +104,11 @@ const GrapheneProtocol = ({ onClose }) => {
 
         <div className="graphene-content">
           <div className="section-header">
-            <h2 className="section-title">
+            <h2 className="graphene-section-title">
               <span className="section-number">{activeSection+1}.</span>
               {sections[activeSection].title}
             </h2>
-            <p className="section-subtitle">{sections[activeSection].subtitle}</p>
+            <p className="graphene-section-subtitle">{sections[activeSection].subtitle}</p>
           </div>
           
           <div className="section-body">
