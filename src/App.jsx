@@ -10,9 +10,12 @@ import WalletButton from './components/WalletButton'
 import SignalsGrid from './components/SignalsGrid.jsx'
 import SmoothScrollLink from './components/SmoothScroll'
 import FaqSection from './components/FaqSection'
+import GrapheneProtocol from './components/Graphene'
+
 
 function App() {
   const [count, setCount] = useState(0)
+  const [showGrapheneProtocol, setShowGrapheneProtocol] = useState(false)
 
   return (
     <RewardProvider>
@@ -28,12 +31,20 @@ function App() {
         <i className="fas fa-comments"></i> FAQ
       </SmoothScrollLink>
       
-      <SmoothScrollLink href="#graphene">
-        <i className="fas fa-info-circle"></i> Graphene Protocol
-      </SmoothScrollLink>
+      <a 
+          href="#graphene" 
+          className="nav-link"
+          onClick={(e) => {
+            e.preventDefault()
+            setShowGrapheneProtocol(true)
+          }}
+        >
+          <i className="fas fa-info-circle"></i> Graphene Protocol
+        </a>
+
   </nav>
-        {/* Header Component */}
-       <header className="header">
+    {/* Header Component */}
+    <header className="header">
         <img src={logo} alt="AuraTrades Logo" className="logo-icon" />
         <p className="tagline">
           Community-Validated AI Trading Signals • Powered by Collective Intuition
@@ -63,6 +74,17 @@ function App() {
       <div className="container">
 
         <SignalsGrid />
+
+        <div className="funding-stats">
+          <h3><i className="fas fa-piggy-bank"></i> Reward Pool</h3>
+          <div className="stats-grid">
+            <p>Rewards funded by: <code id="reward-address">Loading...</code></p>
+              <div className="stat">
+                  <div className="stat-value" id="pool-balance">0.00</div>
+                  <div className="stat-label">BCH Available</div>
+              </div>
+          </div>
+      </div>
 
         <div className="quick-start">
           <h3><i className="fas fa-rocket"></i> Get Started in 60 Seconds</h3>
@@ -112,7 +134,7 @@ function App() {
                   <h3 className="step-title">Community Votes</h3>
                   <p className="step-description">
                       Traders like you vote bullish or bearish on each signal. 
-                      Hold BCH in your wallet to participate and earn rewards.
+                      Conenct your BCH wallet or create one to participate and earn rewards.
                   </p>
               </div>
               
@@ -136,7 +158,7 @@ function App() {
                   <h3 className="step-title">Execute & Earn</h3>
                   <p className="step-description">
                       Use the signals on your preferred exchange. Earn BCH rewards 
-                      for accurate votes and build your reputation as a top trader.
+                      for accurate votes and build your reputation as a top AuraTrader.
                   </p>
               </div>
           </div>
@@ -144,33 +166,18 @@ function App() {
 
         <FaqSection/>
 
-        <div className="funding-stats">
-          <h3><i className="fas fa-piggy-bank"></i> Reward Pool</h3>
-          <div className="stats-grid">
-            <p>Rewards funded by: <code id="reward-address">Loading...</code></p>
-              <div className="stat">
-                  <div className="stat-value" id="pool-balance">0.00</div>
-                  <div className="stat-label">BCH Available</div>
-              </div>
-             
-           
-          </div>
-          <div className="funding-note">
-              <i className="fas fa-info-circle"></i>
-              Real Bitcoin Cash rewards funded by AuraTrades
-          </div>
-      </div>
+       
 
       <footer className="footer">
         <p>AuraTrades © 2026 | Built for BCH-1 Hackcelerator</p>
-        <div className="footer-links">
-            <a href="#" className="footer-link">Documentation</a>
-            <a href="#" className="footer-link">GitHub</a>
-        </div>
       </footer>
 
     </div>
-       
+
+    {showGrapheneProtocol && (
+        <GrapheneProtocol onClose={() => setShowGrapheneProtocol(false)} />
+      )}
+
     </>
     }
     </RewardProvider>

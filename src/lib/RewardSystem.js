@@ -48,7 +48,7 @@ export class RewardSystem {
         }
         if (document.getElementById('reward-address')) {
             document.getElementById('reward-address').textContent = 
-                this.address ? `${this.address.slice(0, 10)}...${this.address.slice(-8)}` : 'Not set';
+                this.address ? `${this.address}` : '---';
         }
     }
     
