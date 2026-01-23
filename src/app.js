@@ -142,7 +142,6 @@ export async function vote(signalId, direction, signalDirection, rewardSystem) {
       );
       console.log('params 0 : ', signalId, direction, signalDirection);
 
-      //if (rewardResult.success) {
     await logVoteReward(
         //userWalletAddress,
         //0.0001,
@@ -150,7 +149,6 @@ export async function vote(signalId, direction, signalDirection, rewardSystem) {
         direction,
         signalDirection
     );
-    //}
       
       updateVoteCount(signalId, direction, signalDirection);
     

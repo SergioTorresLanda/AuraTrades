@@ -5,6 +5,7 @@ export function useWallet() {
   const [walletAddress, setWalletAddress] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [balance, setBalance] = useState(0)
 
   // Load wallet from localStorage on mount
   useEffect(() => {
@@ -12,10 +13,12 @@ export function useWallet() {
     if (savedAddress) {
       setWalletAddress(savedAddress)
       setWalletConnected(true)
+      checkAddressHasBalance(savedAddress)
     }
   }, [])
 
-  const connectWallet = useCallback(async () => {
+  //CREATE NEW WALLET
+  const createWallet = useCallback(async () => {
     if (!window.Wallet || !window.Mainnet) {
       throw new Error('Wallet library not loaded. Please refresh the page.')
     }
@@ -24,7 +27,6 @@ export function useWallet() {
     setError(null)
 
     try {
-      // CREATE A NEW WALLET 
       const wallet = await window.Wallet.newRandom()
       const address = await wallet.cashaddr
       
@@ -32,7 +34,6 @@ export function useWallet() {
       
       // Save to localStorage
       localStorage.setItem('aura_wallet_address', address)
-      localStorage.setItem('aura_wallet', address)
       
       // Update state
       setWalletAddress(address)
@@ -57,10 +58,96 @@ export function useWallet() {
     }
   }, [])
 
+   // NEW: Connect with existing address
+   const connectWallet = useCallback(async (address) => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Validate BCH address format
+      if (!isValidBCHAddress(address)) {
+        throw new Error('Invalid BCH address format')
+      }
+
+      // Check if address has balance
+      const hasBalance = await checkAddressHasBalance(address)
+      if (!hasBalance) {
+        // You might want to warn but not block
+        console.warn('Address has zero balance')
+      }
+
+      // Save to localStorage
+      localStorage.setItem('aura_wallet_address', address)
+      
+      // Update state
+      setWalletAddress(address)
+      setWalletConnected(true)
+      
+      window.walletConnected = true
+      window.userWalletAddress = address
+      
+      return address
+      
+    } catch (error) {
+      setWalletConnected(false)
+      setError(error.message)
+      console.error('Wallet connection failed:', error)
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  // Helper: Validate BCH address
+  const isValidBCHAddress = (address) => {
+    // Basic BCH address validation (bitcoincash: prefix or simple)
+    return address && (
+      address.startsWith('bitcoincash:') || 
+      address.startsWith('bchtest:') ||
+      address.startsWith('q') || // P2PKH
+      address.startsWith('p') // P2SH
+    )
+  }
+
+  // Helper: Check address balance
+  const checkAddressHasBalance = async (address) => {
+    try {
+      // 1. Construct the walletId for watch-only wallet
+      // Format: watch:testnet:bchtest:qq1234567
+      const walletId = `watch:mainnet:${address}`;
+      
+      // 2. Make the POST request to the API
+      const response = await fetch('https://rest-unstable.mainnet.cash/wallet/balance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          walletId: walletId,
+          unit: 'bch' 
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Address balance:', data);
+      
+      // 3. Set balance and return whether > 0
+      setBalance(data.sat || data.bch || 0);
+      return (data.sat > 0) || (data.bch > 0);
+      
+    } catch (error) {
+      console.warn('Could not check balance:', error);
+      return true;
+    }
+  };
+
   const disconnectWallet = useCallback(() => {
     // Clear localStorage
     localStorage.removeItem('aura_wallet_address')
-    localStorage.removeItem('aura_wallet')
     
     // Clear state
     setWalletAddress('')
@@ -91,10 +178,10 @@ export function useWallet() {
                 <p><strong>Seed Phrase (12 words):</strong><br>${mnemonic}</p>
             </div>
             <p style="color: #FF4D7D; font-size: 14px;">
-                ⚠️ If you lose this, you lose access to your BCH rewards!
+                ⚠️ If you lose this, you may lose your progress to get your BCH rewards!
             </p>
             <button onclick="this.parentElement.parentElement.remove()" 
-                    style="background: linear-gradient(135deg, #00FF9D, #00D4FF); color: white; border: none; 
+                    style="background: linear-gradient(135deg,rgb(0, 98, 255)); color: white; border: none; 
                            padding: 10px 30px; border-radius: 8px; cursor: pointer; margin-top: 15px;">
                 I've saved it securely
             </button>
@@ -146,6 +233,7 @@ Click OK to confirm you have saved it.`
     isLoading,
     error,
     connectWallet,
+    createWallet,
     disconnectWallet,
     updateWalletUI
   }
