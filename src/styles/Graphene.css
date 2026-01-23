@@ -373,15 +373,6 @@
     object-fit: contain;
   }
   
-  /* Optional: Different styling for left/right if needed */
-  .left-icon {
-    transform: rotate(-30deg);
-  }
-  
-  .right-icon {
-    transform: rotate(15deg);
-  }
-  
   /* Animation if you want them to pulse like the gems did */
   @keyframes titlePulse {
     0%, 100% { transform: scale(0.8); opacity: 1; }
