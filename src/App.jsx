@@ -1,28 +1,42 @@
 import { useState } from 'react'
 import React from 'react'
-import logo from './assets/logo2.png'
+import logo from './assets/auralogo7.png'
 import './app.js'    
 import './config.js' 
 import './styles/styles.css' 
 import './App.css'
-import { RewardProvider } from './contexts/BCHContext.jsx'
-import WalletButton from './components/WalletButton'
-import SignalsGrid from './components/SignalsGrid.jsx'
+import { RewardProvider } from './contexts/BCHContext'
+import { useWallet } from './hooks/useWallet' 
+import SignalsGrid from './components/SignalsGrid'
 import SmoothScrollLink from './components/SmoothScroll'
 import FaqSection from './components/FaqSection'
 import GrapheneProtocol from './components/Graphene'
-
+import ConnectWalletButton from './components/ConnectWalletButton'  
+import AuraTokens from './components/AuraTokens'
 
 function App() {
   const [count, setCount] = useState(0)
   const [showGrapheneProtocol, setShowGrapheneProtocol] = useState(false)
+  const [showTokens, setShowTokens] = useState(false)
 
   return (
     <RewardProvider>
       {
     <>
      <nav className="how-it-works-nav">
-     <WalletButton />
+     <ConnectWalletButton />
+
+     <a 
+          href="#auraTokens" 
+          className="nav-link"
+          onClick={(e) => {
+            e.preventDefault()
+            setShowTokens(true)
+          }}
+        >
+          <i className="fas fa-trophy"></i> AuraTokens
+        </a>
+
      <SmoothScrollLink href="#how-it-works">
         <i className="fas fa-question-circle"></i> How It Works
       </SmoothScrollLink>
@@ -69,41 +83,30 @@ function App() {
           <div className="stat-value" id="active-users">15</div>
           <div className="stat-label">Active Traders</div>
         </div>
+        <div className="stat-item">
+        <div className="stat-value" id="pool-balance">0.00</div>
+        <div className="stat-label">BCH Available</div>
+        </div>
       </div>
 
       <div className="container">
 
         <SignalsGrid />
 
-        <div className="funding-stats">
-          <h3><i className="fas fa-piggy-bank"></i> Reward Pool</h3>
-          <div className="stats-grid">
-            <p>Rewards funded by: <code id="reward-address">Loading...</code></p>
-              <div className="stat">
-                  <div className="stat-value" id="pool-balance">0.00</div>
-                  <div className="stat-label">BCH Available</div>
-              </div>
-          </div>
-      </div>
-
         <div className="quick-start">
           <h3><i className="fas fa-rocket"></i> Get Started in 60 Seconds</h3>
           <div className="quick-steps">
               <div className="quick-step">
                   <span className="quick-number">①</span>
-                  <span>Connect your BCH wallet</span>
+                  <span>Connect or create your BCH wallet</span>
               </div>
               <div className="quick-step">
                   <span className="quick-number">②</span>
-                  <span>Browse trading signals</span>
-              </div>
-              <div className="quick-step">
-                  <span className="quick-number">③</span>
-                  <span>Vote bullish/bearish</span>
+                  <span>Browse & vote on trading signals</span>
               </div>
               <div className="quick-step">
                   <span className="quick-number">④</span>
-                  <span>Earn BCH rewards</span>
+                  <span>Unlock trophys & claim BCH rewards</span>
               </div>
           </div>
         </div>
@@ -122,7 +125,7 @@ function App() {
                   <h3 className="step-title">AI Generates Signals</h3>
                   <p className="step-description">
                       Our AI bots analyze market data 24/7 using technical indicators 
-                      (RSI, MACD, Moving Averages, Fibonacci, etc.) to generate trading signals, always with a 1:1 risk/reward ratio.
+                       to generate trading signals, always with a 1:1 risk/reward ratio.
                   </p>
               </div>
               
@@ -157,7 +160,7 @@ function App() {
                   </div>
                   <h3 className="step-title">Execute & Earn</h3>
                   <p className="step-description">
-                      Use the signals on your preferred exchange. Earn BCH rewards 
+                      Use the signals on your preferred exchange. Unlock NFTs and claim BCH rewards 
                       for accurate votes and build your reputation as a top AuraTrader.
                   </p>
               </div>
@@ -166,17 +169,19 @@ function App() {
 
         <FaqSection/>
 
-       
-
       <footer className="footer">
+      <p>Certifying trading skill on-chain with collectibles - proof of expertise.</p>
         <p>AuraTrades © 2026 | Built for BCH-1 Hackcelerator</p>
       </footer>
 
     </div>
 
     {showGrapheneProtocol && (
-        <GrapheneProtocol onClose={() => setShowGrapheneProtocol(false)} />
-      )}
+      <GrapheneProtocol onClose={() => setShowGrapheneProtocol(false)} />
+    )}
+    {showTokens && (
+      <AuraTokens onClose={() => setShowTokens(false)} />
+    )}
 
     </>
     }

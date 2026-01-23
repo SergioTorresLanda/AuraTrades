@@ -63,6 +63,21 @@ function SignalsGrid() {
       downvotes: 7,
       botName: "ChainSpy",
       winRate: "63%"
+    },
+    {
+      id: 5,
+      pair: "BNB/USDT",
+      fullName: "Binance / Tether",
+      direction: "bearish",
+      action: "SHORT",
+      entryPrice: "$886",
+      targetPrice: "$840",
+      stopLoss: "$920",
+      confidence: 50,
+      upvotes: 10,
+      downvotes: 10,
+      botName: "Nostradamus",
+      winRate: "43%"
     }
     // Add unlimited more signals...
   ]
@@ -103,7 +118,7 @@ function SignalsGrid() {
         </div>
       </div>
       
-      {/* Optional navigation buttons */}
+      {/* Optional navigation buttons 
       <div className="carousel-controls">
         <button 
           className="carousel-btn prev"
@@ -124,6 +139,7 @@ function SignalsGrid() {
           <i className="fas fa-chevron-right"></i>
         </button>
       </div>
+      */}
     </section>
   )
 }

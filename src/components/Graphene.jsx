@@ -9,22 +9,22 @@ const GrapheneProtocol = ({ onClose }) => {
     {
       title: "Position Sizing: The Emotional Neutralizer",
       subtitle: "The line between professional operator and gambler",
-      content: "Allocate only 0.5% to 3% of your risk capital per trade. No exceptions.",
+      content: "Allocate only 1% to 2% of your risk capital per trade. No exceptions.",
       points: [
-        "The Litmus Test: You must size your position so that the outcome—win or loss—elicits zero emotional response.",
-        "If your heart rate increases when a trade is active, your size is too large.",
-        "By removing emotion, you remove the 'Revenge Trading' and 'Greed' impulses that destroy accounts.",
-        "The percentage stays fixed; only the dollar amount grows as your capital does."
+        "You must size your position so that the outcome—win or loss—elicits zero emotional response.",
+        "If you experience swings of euphoria or fear while a trade is active, your position size is too large.",
+        "By removing emotion, you eliminate the 'Revenge Trading' and 'Greed' impulses that destroy accounts.",
+        "The percentage stays fixed; the dollar value of the position grows as your capital does."
       ]
     },
     {
       title: "Asset Selection: Liquidity as a Shield",
       subtitle: "Focus on major assets only",
-      content: "Focus exclusively on a maximum of 3 Major Assets (e.g., BTC, ETH, SOL).",
+      content: "Focus exclusively on a maximum of 5 Major Assets (e.g., BTC, ETH, SOL, XRP, BCH).",
       points: [
         "The Logic: Low-cap assets are 'shallow pools' easily manipulated by bots and market makers seeking 'hidden' liquidity (your Stop Loss).",
-        "By trading high-liquidity, top-tier assets, you ensure your entries and exits are respected.",
-        "By narrowing your focus, you become a master of that asset's specific 'heartbeat' and patterns."
+        "By trading high-liquidity, top-tier assets, you ensure your presence is camouflaged within the market volume.",
+        "By narrowing your focus to a few pairs, you become a master of those assets' specific 'heartbeat' and patterns."
       ]
     },
     {
@@ -33,10 +33,10 @@ const GrapheneProtocol = ({ onClose }) => {
       content: "Every trade is executed with a strict 1:1 Risk-Reward Ratio.",
       points: [
         "The Logic: A priori, price action is a 50/50 probability. We acknowledge this mathematical truth.",
-        "Our technical analysis is not a 'crystal ball'; it is simply an 'edge' that shifts those odds from 50/50 to 60/40 or 70/30.",
+        "Our technical analysis is not a 'crystal ball'; it is an 'edge' that shifts those odds to 60/40 or 70/30.",
         "Over a long series of trades, this statistical advantage—grounded in the Kelly Criterion—ensures consistent capital growth.",
-        "Capital Security: Never keep 100% of your risk capital on an exchange. Keep only 3x your position size in your active trading account.",
-        "Keep the remaining 90% in cold storage or 'hard' currency to protect from platform failures or regulatory freezes."
+        "Capital Security: Never keep 100% of your risk capital on an exchange. Keep at most 3x your position size in your active trading account.",
+        "Keep the remaining 90% in cold storage or hard currency to protect yourself from excessive volatility, platform failures, or regulatory freezes."
       ]
     },
     {
@@ -44,22 +44,21 @@ const GrapheneProtocol = ({ onClose }) => {
       subtitle: "Removing the human element",
       content: "Once a trade is live, the human element must be removed.",
       points: [
-        "The Protocol: Do not stare at the charts. This is 'Gambler's Obsession' and a sign of emotional attachment.",
-        "We trade on 4H and Daily timeframes; check your positions once every 24 hours.",
-        "No Manual Interference: Never move your Stop Loss to 'Break Even' or close a trade manually.",
-        "This dismantles the statistical structure of the system. Let the math work. Trust the edge."
+        "The Protocol: Do not stare at the charts. This is 'Gambler's Obsession' and a symptom of emotional attachment.",
+        "We trade on 4-hour and Daily timeframes; check your positions once every 24 hours.",
+        "No Manual Interference: Never move your Stop Loss to 'break even' or close a trade manually.",
+        "Manual interference dismantles the statistical structure of the system. Let the math work. Trust the edge."
       ]
     },
     {
       title: "Resilient Spirit: The Stoic Trader",
-      subtitle: "Discipline as your only protection",
-      content: "In the 'stinky swamp' of the derivatives markets, trust no one.",
+      subtitle: "Discipline is your ultimate shield",
+      content: "In the wild jungle of crypto and derivatives markets, trust no one.",
       points: [
-        "The Hard Truth: You will make mistakes. You will take losses.",
-        "This is the cost of tuition in the world's most difficult school.",
-        "Do not blame the market or the 'sharks.' Be stoic.",
-        "Analyze the error, internalize the lesson, and return to the Protocol.",
-        "Your discipline is your only true protection."
+        "The Hard Truth: You will make mistakes and take losses. Accept this in advance to overcome the drawdowns.",
+        "Do not blame others for your actions. Be stoic. Do not punish yourself; learn and keep moving forward.",
+        "When a setup fails, analyze the error objectively, internalize the lesson, and return to the Protocol.",
+        "Your discipline is your only true edge."
       ]
     }
   ];
@@ -158,7 +157,7 @@ const GrapheneProtocol = ({ onClose }) => {
         <div className="graphene-footer">
           <p className="protocol-disclaimer">
             <i className="fas fa-exclamation-triangle"></i>
-            Remember: Discipline is your only true protection. Trust the protocol.
+            All information provided here is for educational purposes only and must never be taken as financial advice. Trading derivatives and cryptocurrencies involves high risk; no profits are guaranteed. You acknowledge that you are solely responsible for your own trading decisions and their outcomes.
           </p>
         </div>
       </div>

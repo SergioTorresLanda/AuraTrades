@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'  // Add useState
 import { useWallet } from '../hooks/useWallet'
 
 function WalletButton() {
@@ -7,18 +7,17 @@ function WalletButton() {
     walletAddress, 
     isLoading, 
     error,
-    connectWallet, 
+    createWallet, 
     disconnectWallet 
   } = useWallet()
-
+  
   const handleClick = async (e) => {
     e.preventDefault()
     
     if (!walletConnected) {
       try {
-        await connectWallet()
+        await createWallet()
       } catch (err) {
-        // Error is already set in hook, but you could show a toast
         console.error('Connection failed:', err)
       }
     } else {
@@ -30,7 +29,7 @@ function WalletButton() {
 
   // Format address for display
   const displayAddress = walletAddress 
-    ? `${walletAddress.substring(0, 6)}...${walletAddress.slice(-4)}`
+    ? `${walletAddress.substring(0, 8)}...${walletAddress.slice(-6)}`
     : ''
 
   return (
@@ -40,11 +39,11 @@ function WalletButton() {
         className="nav-link" 
         onClick={handleClick}
         disabled={isLoading}
-        title={walletAddress ? `Connected: ${walletAddress}` : ''}
+        title={walletAddress ? `${walletAddress}` : ''}
       >
         <i className="fas fa-wallet"></i>
-        {isLoading ? ' Connecting...' : (
-          walletConnected ? ` ${displayAddress}` : ' Connect Wallet'
+        {isLoading ? '...' : (
+          walletConnected ? ` ${displayAddress}` : 'Create Wallet'
         )}
       </a>
       

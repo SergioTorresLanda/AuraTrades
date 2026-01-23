@@ -8,6 +8,7 @@ import xrpIcon from '../assets/xrp.png'
 import solIcon from '../assets/sol.png' 
 import adaIcon from '../assets/ada.png'
 import dogeIcon from '../assets/doge.png' 
+import bnbIcon from '../assets/bnb.png' 
 
 function SignalCard({ 
   id = 1,
@@ -74,7 +75,8 @@ function SignalCard({
     xrp: xrpIcon,
     sol: solIcon,
     ada: adaIcon,  // if you have more
-    doge: dogeIcon
+    doge: dogeIcon, 
+    bnb: bnbIcon
   }
   
   // Then in component
