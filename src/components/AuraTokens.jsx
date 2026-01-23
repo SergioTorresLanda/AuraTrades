@@ -31,6 +31,8 @@ const AuraTokens = ({ onClose }) => {
   const [unlockedTokens] = useState([
     'lidia', 'grizzly'
   ]); // List of unlocked token IDs
+  const [unlockedTokens2] = useState([
+  ]); 
 
   const bullTokens = [
     { id: 'lidia', name: 'Lidia', image: lidia, condition: '10 bullish votes', progressKey: 'lidia', reward: "0.005" },
@@ -166,11 +168,11 @@ const AuraTokens = ({ onClose }) => {
           <h2 className="section-titleX">My Tokens</h2>
         </div>
 
-        {unlockedTokens.length === 0 ? (
+        {unlockedTokens2.length === 0 ? (
           <div className="empty-state">
             <p className="section-subtitleX">
-            {unlockedTokens.length > 0 
-              ? `You've unlocked ${unlockedTokens.length} tokens!` 
+            {unlockedTokens2.length > 0 
+              ? `You've unlocked ${unlockedTokens2.length} tokens!` 
               : "You have not unlocked any tokens yet. Keep voting on signals to unlock them and redeem BCH rewards!"
             }
           </p>
