@@ -28,3 +28,13 @@ dist-ssr
 *.env*
 firebase.js
 config.js
+
+# Firebase cache
+.firebase/
+
+# Node modules (never commit these, they are huge)
+node_modules/
+functions/node_modules/
+
+# Build output (standard for Vite)
+dist/
