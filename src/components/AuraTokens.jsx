@@ -11,6 +11,9 @@ import black from '../assets/black.png';
 import grizzly from '../assets/grizzly.png';
 import polar from '../assets/polar.png';
 import inferno from '../assets/inferno.png';
+import hero from '../assets/herox.png';
+import cypher from '../assets/cypherpunk.png';
+import satoshi from '../assets/sat.png';
 
 const AuraTokens = ({ onClose }) => {
     console.log('TestAuraTokens rendering')
@@ -25,28 +28,39 @@ const AuraTokens = ({ onClose }) => {
     grizzly: 100,
     sloth: 30,
     polar: 20,
-    inferno: 5
+    inferno: 5,
+
+    hero:100,
+    cypherpunk:10,
+    satoshi:5
   });
 
   const [unlockedTokens] = useState([
-    'lidia', 'grizzly'
+    'lidia', 'hero', 'grizzly'//, 'sloth',  'bison', 'polar', 'brahman', 'buffalo', 'inferno', 'cypherpunk', 'satoshi'
   ]); // List of unlocked token IDs
   const [unlockedTokens2] = useState([
   ]); 
+  
 
   const bullTokens = [
-    { id: 'lidia', name: 'Lidia', image: lidia, condition: '10 bullish votes', progressKey: 'lidia', reward: "0.005" },
-    { id: 'bison', name: 'Bison', image: bison, condition: '10 correct bullish votes', progressKey: 'bison', reward: "0.01" },
-    { id: 'buffalo', name: 'Buffalo', image: buffalo, condition: '30 bullish votes*', progressKey: 'buffalo', reward: "0.05" },
-    { id: 'brahman', name: 'Brahman', image: brahman, condition: '30 correct bullish votes*', progressKey: 'brahman', reward: "0.1"}
+    { id: 'lidia', name: 'Lidia', image: lidia, condition: '21 bullish votes', progressKey: 'lidia', reward: "0.005" },
+    { id: 'bison', name: 'Bison', image: bison, condition: '21 correct bullish votes', progressKey: 'bison', reward: "0.01" },
+    { id: 'buffalo', name: 'Buffalo', image: buffalo, condition: '21 bullish votes*', progressKey: 'buffalo', reward: "0.05" },
+    { id: 'brahman', name: 'Brahman', image: brahman, condition: '21 correct bullish votes*', progressKey: 'brahman', reward: "0.1"}
 
   ];
 
   const bearTokens = [
-    { id: 'grizzly', name: 'Grizzly', image: grizzly, condition: '10 bearish votes', progressKey: 'grizzly', reward: "0.005" },
-    { id: 'sloth', name: 'Sloth', image: black, condition: '10 correct bearish votes', progressKey: 'sloth', reward: "0.01" },
-    { id: 'polar', name: 'Polar', image: polar, condition: '30 bearish votes*', progressKey: 'polar', reward: "0.05" },
-    { id: 'inferno', name: 'Inferno', image: inferno, condition: '30 correct bearish votes*', progressKey: 'inferno', reward: "0.1" }
+    { id: 'grizzly', name: 'Grizzly', image: grizzly, condition: '21 bearish votes', progressKey: 'grizzly', reward: "0.005" },
+    { id: 'sloth', name: 'Sloth', image: black, condition: '21 correct bearish votes', progressKey: 'sloth', reward: "0.01" },
+    { id: 'polar', name: 'Polar', image: polar, condition: '21 bearish votes*', progressKey: 'polar', reward: "0.05" },
+    { id: 'inferno', name: 'Inferno', image: inferno, condition: '21 correct bearish votes*', progressKey: 'inferno', reward: "0.1" }
+  ];
+
+  const loyaltyTokens = [
+    { id: 'hero', name: 'Hero', image: hero, condition: 'first voter in 21 signals', progressKey: 'hero', reward: "0.005" },
+    { id: 'cypherpunk', name: 'Cypherpunk', image: cypher, condition: 'vote 21 days in a row', progressKey: 'cypherpunk', reward: "0.05" },
+    { id: 'satoshi', name: 'Satoshi', image: satoshi, condition: 'vote 50 days in a row**', progressKey: 'satoshi', reward: "0.21" },
   ];
 
   return (
@@ -110,7 +124,7 @@ const AuraTokens = ({ onClose }) => {
               </div>
             ))}
           </div>
-          <p className="collection-subtitle">*Voting with a connected wallet with balance greater than 1 BCH.
+          <p className="collection-subtitle">*Voting with a connected wallet with balance greater than 0.1 BCH.
           </p>
         </div>
 
@@ -157,10 +171,56 @@ const AuraTokens = ({ onClose }) => {
               </div>
             ))}
           </div>
-          <p className="collection-subtitle">*Voting with a connected wallet with balance greater than 1 BCH.</p>
+          <p className="collection-subtitle">*Voting with a connected wallet with balance greater than 0.1 BCH.</p>
 
         </div>
-      </div>
+
+        <div className="collection-group">
+            <h3 className="collection-title loyalty">
+              <i className="fas"></i> Loyalty Collection
+            </h3>          
+            <div className="tokens-grid">
+              {loyaltyTokens.map((token) => (
+                <div key={token.id} className={`token-card ${unlockedTokens.includes(token.id) ? 'unlocked' : 'locked'}`}>
+                  <div className="token-image-container">
+                    <img src={token.image} alt={token.name} className="token-image" />
+                    {!unlockedTokens.includes(token.id) && (
+                      <div className="lock-overlay">
+                        <i className="fas fa-lock"></i>
+                      </div>
+                    )}
+                  </div>
+                  <div className="token-info">
+                    <h4 className="token-name">{token.name}</h4>
+                    <p className="token-condition">{token.condition}</p>
+                    
+                    <div className="progress-section">
+                      <div className="progress-bar">
+                        <div 
+                          className="progress-fill"
+                          style={{ width: `${userProgress[token.progressKey]}%` }}
+                        ></div>
+                      </div>
+                      <span className="progress-text">
+                        {unlockedTokens.includes(token.id) ? '100%' : `${userProgress[token.progressKey]}%`}
+                      </span>
+                    </div>
+                    {!unlockedTokens.includes(token.id) && (
+                    <p className="token-reward">Reward: {token.reward} BCH</p>
+                    )}
+                    {unlockedTokens.includes(token.id) && (
+                    <button className="cta-button">
+                    <i className="fas fa-vote-yea"></i> Claim: {token.reward} BCH
+                  </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="collection-subtitle">**Voting with a connected wallet with balance greater than 1 BCH.</p>
+
+          </div>
+      </div>      
 
       {/* Second Section: User's Tokens */}
       <div className="my-tokens-section">

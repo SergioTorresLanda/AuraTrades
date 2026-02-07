@@ -5,7 +5,7 @@ function FaqSection() {
   const faqData = [
     {
       question: "How do I earn BCH rewards?",
-      answer: "Simply vote on signals! Each vote earns 0.0005 BCH. Correct votes earn additional 0.001 BCH bonuses. Rewards are sent automatically to your connected wallet."
+      answer: "Simply vote on signals! Achieve the AuraTokens conditions to unlock them as NFT, rewards are sent automatically to your connected wallet when minted!"
     },
     {
       question: "Do I need trading experience?",
