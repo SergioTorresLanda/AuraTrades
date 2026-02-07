@@ -80,7 +80,7 @@ function SignalsGrid() {
       winRate: "65%"
     },
     {
-      id: 5,
+      id: 6,
       pair: "BCH/USDT",
       fullName: "Bitcoin Cash / Tether",
       direction: "bullish",

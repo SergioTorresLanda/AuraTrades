@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useReward } from '../contexts/BCHContext'
 import { vote } from '../app.js'
 import btcIcon from '../assets/btc.png'
 import ethIcon from '../assets/eth.png'
@@ -29,8 +28,6 @@ function SignalCard({
   const [downvoteCount, setDownvoteCount] = useState(downvotes)
   const [confidenceLevel, setConfidenceLevel] = useState(confidence)
   const [hasVoted, setHasVoted] = useState(false)
-  
-  const { rewardSystem } = useReward()
 
   const handleVote = async (voteType) => {
     if (hasVoted) {
@@ -39,7 +36,7 @@ function SignalCard({
     }
 
     try {
-      const result = await vote(id, voteType, action === "LONG" ? 'up' : 'down', rewardSystem)
+      const result = await vote(id, voteType, action === "LONG" ? 'up' : 'down')
       
       // Update local state
       if (voteType === 'up') {
@@ -51,7 +48,6 @@ function SignalCard({
       // Update confidence (you might want to calculate this based on votes)
       const newConfidence = calculateNewConfidence(voteType)
       setConfidenceLevel(newConfidence)
-      
       setHasVoted(true)
       
     } catch (error) {

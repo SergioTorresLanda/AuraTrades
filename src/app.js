@@ -6,7 +6,7 @@ const REWARD_LIMITS = {
     totalPool: 0.3 
 };
 
-let userWalletAddress = "bitcoincash:qqzzmf9z334gw68lmhtzg68ktqpf4yp34gruglkljr"
+let userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw"
 let walletConnected = false;
 const voteRateLimit = {};
 
@@ -118,9 +118,7 @@ cards.forEach(card => {
 console.log("App initialized with mainnet-js");
 }
 
-export async function vote(signalId, direction, signalDirection, rewardSystem) {
-
-    if (!rewardSystem) return ;
+export async function vote(signalId, direction, signalDirection) {
 
     if (!walletConnected) {
         alert('Create or connect your BCH wallet to receive vote rewards!');
@@ -134,38 +132,29 @@ export async function vote(signalId, direction, signalDirection, rewardSystem) {
       
     //const voteBtn = event.target;
     //voteBtn.disabled = true;
-    
-      // 3. Client sends BCH reward (using mainnet-js)
-      const rewardResult = await rewardSystem.sendReward(
-          userWalletAddress,
-          0.0002
-      );
-      console.log('params 0 : ', signalId, direction, signalDirection);
+    console.log('params vote : ', signalId, direction, signalDirection);
 
-    await logVoteReward(
-        //userWalletAddress,
-        //0.0001,
+    await logVote(
+        userWalletAddress,
         signalId,
         direction,
         signalDirection
     );
       
-      updateVoteCount(signalId, direction, signalDirection);
+    updateVoteCount(signalId, direction, signalDirection);
     
-    alert(`✅ Voted ${direction.toUpperCase()}!\n\n` +
-    `0.0001 BCH reward sent to your wallet.\n` +
-    `Transaction: ${rewardResult.txId}\n` +
-    `View on explorer: ${rewardResult.explorerUrl}`);
+    alert(`✅ Voted ${direction.toUpperCase()}!`);
     //voteBtn.disabled = false;
     //addToTransactionHistory(result.data);
 }
 
-async function logVoteReward(signalId, direction, signalDirection) {
+async function logVote(address, signalId, direction, signalDirection) {
     try {
         const logRewardFn = httpsCallable(functions, 'logReward');
         const result = await logRewardFn({
             signalId: signalId,
-            follows: direction == signalDirection
+            follows: direction == signalDirection,
+            address: address
         });
         console.log("Success:", result.data);
     } catch (error) {
@@ -242,6 +231,21 @@ function updateVotePercentages(signalId, direction, signalDirection) {
 }
 
 //AURATOKENS
+export async function sendReward(reward, rewardSystem) {
+    if (!rewardSystem) return ;
+    console.log('send reward 00 : ', reward);
+    // 3. Client sends BCH reward (using mainnet-js)
+      const rewardResult = await rewardSystem.sendReward(
+          userWalletAddress,
+          reward
+      );
+
+    alert(`✅ Reward sent !\n\n` + 
+    `${reward} BCH was sent to your wallet.\n` +
+    `Transaction: ${rewardResult.txId}\n` +
+    `View on explorer: ${rewardResult.explorerUrl}`);
+}
+
 const createTrophyToken = (userData, tokenData) => {
     // Generate unique commitment hash
     const commitment = sha256(

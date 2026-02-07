@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import { useReward } from '../contexts/BCHContext'
+import { sendReward } from '../app.js'
 // Import your images
 import yak from '../assets/yak.png';
 import bison from '../assets/bisonX.png';
@@ -17,33 +18,35 @@ import satoshi from '../assets/sat.png';
 
 const AuraTokens = ({ onClose }) => {
     console.log('TestAuraTokens rendering')
+  const { rewardSystem } = useReward()
   // Mock data - replace with real user progress
   const [userProgress] = useState({
     // Bull tokens progress 
     lidia: 100,
-    bison: 25,
-    buffalo: 10,
-    brahman: 0,
+    bison: 50,
+    buffalo: 20,
+    brahman: 5,
     // Bear tokens progress
-    grizzly: 100,
-    sloth: 30,
-    polar: 20,
-    inferno: 5,
-
-    hero:100,
-    cypherpunk:10,
+    grizzly: 40,
+    sloth: 20,
+    polar: 10,
+    inferno: 2,
+    //Loyalty tokens progress
+    hero:50,
+    cypherpunk:20,
     satoshi:5
   });
 
   const [unlockedTokens] = useState([
-    'lidia', 'hero', 'grizzly'//, 'sloth',  'bison', 'polar', 'brahman', 'buffalo', 'inferno', 'cypherpunk', 'satoshi'
+    'lidia', //'hero', 'grizzly'//, 'sloth',  'bison', 'polar', 'brahman', 'buffalo', 'inferno', 'cypherpunk', 'satoshi'
   ]); // List of unlocked token IDs
   const [unlockedTokens2] = useState([
   ]); 
   
 
+
   const bullTokens = [
-    { id: 'lidia', name: 'Lidia', image: lidia, condition: '21 bullish votes', progressKey: 'lidia', reward: "0.005" },
+    { id: 'lidia', name: 'Lidia', image: lidia, condition: '21 bullish votes', progressKey: 'lidia', reward: "0.002" },
     { id: 'bison', name: 'Bison', image: bison, condition: '21 correct bullish votes', progressKey: 'bison', reward: "0.01" },
     { id: 'buffalo', name: 'Buffalo', image: buffalo, condition: '21 bullish votes*', progressKey: 'buffalo', reward: "0.05" },
     { id: 'brahman', name: 'Brahman', image: brahman, condition: '21 correct bullish votes*', progressKey: 'brahman', reward: "0.1"}
@@ -62,6 +65,28 @@ const AuraTokens = ({ onClose }) => {
     { id: 'cypherpunk', name: 'Cypherpunk', image: cypher, condition: 'vote 21 days in a row', progressKey: 'cypherpunk', reward: "0.05" },
     { id: 'satoshi', name: 'Satoshi', image: satoshi, condition: 'vote 50 days in a row**', progressKey: 'satoshi', reward: "0.21" },
   ];
+    const [isClaimed, setIsClaimed] = useState(false)
+
+   const handleReward = async (reward) => {
+    console.error('handleReward:', reward)
+
+      if (isClaimed) {
+        alert("You've already claimed this reward!")
+        return
+      }
+  
+      try {
+        const result = await sendReward(reward, rewardSystem)
+        
+        // Update local state
+    
+        // Update confidence (you might want to calculate this based on votes)
+        
+      } catch (error) {
+        console.error('Reward failed:', error)
+        alert('Reward failed. Please try again.')
+      }
+    }
 
   return (
     <div className="aura-tokens-overlay" onClick={onClose}>
@@ -116,9 +141,15 @@ const AuraTokens = ({ onClose }) => {
                   <p className="token-reward">Reward: {token.reward} BCH</p>
                   )}
                   {unlockedTokens.includes(token.id) && (
-                    <button className="cta-button">
-                    <i className="fas fa-vote-yea"></i> Claim: {token.reward} BCH
-                  </button>
+                     <button 
+                     className={`cta-button ${isClaimed ? 'disabled' : ''}`}
+                     onClick={() => {
+                       handleReward(token.reward)
+                     }}
+                     disabled={isClaimed}
+                     >
+                     <i className="fas fa-coin "></i> Claim: {token.reward} BCH
+                     </button>
                   )}
                 </div>
               </div>
@@ -163,9 +194,15 @@ const AuraTokens = ({ onClose }) => {
                   <p className="token-reward">Reward: {token.reward} BCH</p>
                   )}
                   {unlockedTokens.includes(token.id) && (
-                  <button className="cta-button">
-                  <i className="fas fa-vote-yea"></i> Claim: {token.reward} BCH
-                </button>
+                   <button 
+                   className={`cta-button ${isClaimed ? 'disabled' : ''}`}
+                   onClick={() => {
+                     handleReward(token.reward)
+                   }}
+                   disabled={isClaimed}
+                   >
+                   <i className="fas fa-coin "></i> Claim: {token.reward} BCH
+                   </button>
                   )}
                 </div>
               </div>
@@ -209,9 +246,15 @@ const AuraTokens = ({ onClose }) => {
                     <p className="token-reward">Reward: {token.reward} BCH</p>
                     )}
                     {unlockedTokens.includes(token.id) && (
-                    <button className="cta-button">
-                    <i className="fas fa-vote-yea"></i> Claim: {token.reward} BCH
-                  </button>
+                    <button 
+                    className={`cta-button ${isClaimed ? 'disabled' : ''}`}
+                    onClick={() => {
+                      handleReward(token.reward)
+                    }}
+                    disabled={isClaimed}
+                    >
+                    <i className="fas fa-coin "></i> Claim: {token.reward} BCH
+                    </button>
                     )}
                   </div>
                 </div>

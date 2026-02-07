@@ -20,7 +20,8 @@ exports.logReward = functions.https.onCall(async (request) => {
     try {
         await db.collection('rewards').add({
             signalId: data.signalId,
-            follows: data.follows
+            follows: data.follows,
+            address: data.address
         });
         
         console.log('Successfully logged reward');
