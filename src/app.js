@@ -6,7 +6,7 @@ const REWARD_LIMITS = {
     totalPool: 0.3 
 };
 
-let userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw"
+let userWalletAddress = "bitcoincash:qqzzmf9z334gw68lmhtzg68ktqpf4yp34gruglkljr"
 let walletConnected = false;
 const voteRateLimit = {};
 
@@ -138,7 +138,7 @@ export async function vote(signalId, direction, signalDirection, rewardSystem) {
       // 3. Client sends BCH reward (using mainnet-js)
       const rewardResult = await rewardSystem.sendReward(
           userWalletAddress,
-          0.0001
+          0.0002
       );
       console.log('params 0 : ', signalId, direction, signalDirection);
 
@@ -240,3 +240,126 @@ function updateVotePercentages(signalId, direction, signalDirection) {
         }
     }
 }
+
+//AURATOKENS
+const createTrophyToken = (userData, tokenData) => {
+    // Generate unique commitment hash
+    const commitment = sha256(
+      `${tokenData.id}-${userData.address}-${Date.now()}`
+    ).substring(0, 40);
+  
+    const trophyToken = {
+      category: 'achievement',
+      commitment: `0x${commitment}`,
+      capability: 'none', // Non-upgradable, unique token
+      data: {
+        // Basic achievement info
+        achievementId: tokenData.id,
+        name: tokenData.name,
+        type: tokenData.id.includes('bull') ? 'bull' : 
+              tokenData.id.includes('bear') ? 'bear' : 'loyalty',
+        
+        // User info
+        recipient: userData.address, // From wallet connection
+        awarded: new Date().toISOString(),
+        
+        // Achievement-specific stats
+        stats: {
+          // Bull tokens specific
+          ...(tokenData.id.includes('bull') && {
+            totalBullishVotes: userData.stats.totalBullishVotes,
+            correctBullishVotes: userData.stats.correctBullishVotes,
+            bullishAccuracy: userData.stats.correctBullishVotes / userData.stats.totalBullishVotes,
+            requiredForToken: tokenData.condition.includes('correct') ? 21 : 21
+          }),
+          
+          // Bear tokens specific  
+          ...(tokenData.id.includes('bear') && {
+            totalBearishVotes: userData.stats.totalBearishVotes,
+            correctBearishVotes: userData.stats.correctBearishVotes,
+            bearishAccuracy: userData.stats.correctBearishVotes / userData.stats.totalBearishVotes,
+            requiredForToken: tokenData.condition.includes('correct') ? 21 : 21
+          }),
+          
+          // Loyalty tokens specific
+          ...(tokenData.id.includes('hero') || tokenData.id.includes('cypher') || tokenData.id.includes('satoshi') && {
+            consecutiveDays: userData.stats.consecutiveDays,
+            totalDaysVoted: userData.stats.totalDaysVoted,
+            walletBalance: userData.walletBalance, // For * conditions
+            requiredForToken: tokenData.condition.includes('50') ? 50 : 21
+          }),
+          
+          // Common stats
+          overallAccuracy: userData.stats.overallAccuracy,
+          totalVotes: userData.stats.totalVotes,
+          rank: userData.stats.rank,
+          unlockScore: userData.stats.unlockScore
+        },
+        
+        // Reward info
+        reward: {
+          amount: tokenData.reward,
+          currency: 'BCH',
+          claimed: false,
+          claimTx: null,
+          claimableAt: new Date().toISOString() // Immediately claimable
+        },
+        
+        // Proof data (on-chain references)
+        proof: {
+          // Links to BCH transactions proving votes
+          lastVoteTx: userData.lastVoteTxId,
+          achievementTx: null, // Will be filled when minted on-chain
+          merkleRoot: userData.votesMerkleRoot, // For batch verification
+          
+          // For * conditions (wallet balance requirement)
+          ...(tokenData.condition.includes('*') && {
+            balanceProofTx: userData.balanceProofTx,
+            minBalance: '0.1', // or '1' for **
+            verifiedAt: userData.balanceVerifiedAt
+          })
+        },
+        
+        // Metadata
+        version: '1.0',
+        generation: 'gen1', // First generation tokens
+        rarity: tokenData.reward >= '0.1' ? 'legendary' : 
+                tokenData.reward >= '0.05' ? 'epic' : 
+                tokenData.reward >= '0.01' ? 'rare' : 'common',
+        
+        // Visual/UI data
+        display: {
+          image: tokenData.image, // Reference to image file
+          color: tokenData.id.includes('bull') ? '#00FF9D' : 
+                 tokenData.id.includes('bear') ? '#FF3366' : '#FFD700',
+          animation: tokenData.id.includes('brahman') || 
+                     tokenData.id.includes('inferno') || 
+                     tokenData.id.includes('satoshi') ? 'glow' : 'none'
+        }
+      }
+    };
+  
+    return trophyToken;
+  };
+  
+  // Example usage:
+  const userData = {
+    address: userWalletAddress,
+    stats: {
+      totalBullishVotes: 0,
+      correctBullishVotes: 0,
+      totalBearishVotes: 0,
+      correctBearishVotes: 0,
+      consecutiveDays: 0,
+      overallAccuracy: 0.0,
+      totalVotes: 0,
+      rank: 21,
+      unlockScore: 185
+    },
+    walletBalance: '0.25',
+    lastVoteTxId: 'abc123...',
+    votesMerkleRoot: 'def456...'
+  };
+  
+  //const lidiaToken = createTrophyToken(userData, bullTokens[0]);
+  //console.log('Lidia Trophy Token:', lidiaToken);

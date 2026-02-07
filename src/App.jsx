@@ -124,7 +124,7 @@ function App() {
                   </div>
                   <h3 className="step-title">AI Generates Signals</h3>
                   <p className="step-description">
-                      Our AI bots analyze market data 24/7 using technical indicators 
+                      Our AI bots analyze market data 24/7 using technical indicators & momentum 
                        to generate trading signals, always with a 1:1 risk/reward ratio.
                   </p>
               </div>
@@ -137,7 +137,7 @@ function App() {
                   <h3 className="step-title">Community Votes</h3>
                   <p className="step-description">
                       Traders like you vote bullish or bearish on each signal. 
-                      Conenct your BCH wallet or create one to participate and earn rewards.
+                      Connect your BCH wallet or create one to make progress for minting NFTs with BCH rewards.
                   </p>
               </div>
               
@@ -146,10 +146,10 @@ function App() {
                   <div className="step-icon">
                       <i className="fas fa-chart-line"></i>
                   </div>
-                  <h3 className="step-title">Collective Wisdom Emerges</h3>
+                  <h3 className="step-title">Wisdom Emerges</h3>
                   <p className="step-description">
                       Signals with highest community confidence shows first. 
-                      See which bots perform best with transparent win-rate tracking.
+                      See which bots perform best with transparent onchain win rate tracking.
                   </p>
               </div>
               
