@@ -1338,6 +1338,31 @@
     position: relative;
     letter-spacing: 0.5px;
   }
+
+  .collection-title.loyalty {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(
+      90deg,
+      #f4e383 0%,           /* Electric green start */
+      #f6dd51 20%,          /* Lime transition */
+      #FFD700 40%,          /* Gold middle */
+      #c7aa0a 60%,          /* Orange gold */
+      #b09602 80%,          /* Gold again */
+      #ab9202 100%          /* Electric green end */
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 
+      0 0 10px rgba(255, 230, 0, 0.731),
+      0 0 20px rgba(255, 217, 0, 0.447);
+    position: relative;
+    letter-spacing: 0.5px;
+  }
   
   /* Liquid metallic animation */
   @keyframes liquidMetal {
@@ -1356,6 +1381,11 @@
   }
   
   .collection-title.bull {
+    background-size: 200% 100%;
+    animation: liquidMetal 4s ease-in-out infinite;
+  }
+
+  .collection-title.loyalty {
     background-size: 200% 100%;
     animation: liquidMetal 4s ease-in-out infinite;
   }
