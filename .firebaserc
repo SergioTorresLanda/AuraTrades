@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "alphahive-3fb9c"
+  },
+  "targets": {
+    "alphahive-3fb9c": {
+      "hosting": {
+        "app": [
+          "auratrades"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
