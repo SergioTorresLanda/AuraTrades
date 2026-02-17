@@ -30,8 +30,6 @@ async function connectWallet() {
         localStorage.setItem('aura_wallet', userWalletAddress);
         // Show IMPORTANT backup warning
         showBackupWarning(wallet.mnemonic);
-
-        updateWalletUI();
                 
     } catch (error) {
         walletConnected = false;
@@ -79,23 +77,6 @@ function showBackupWarning(seed) {
     }, 60000);
 }
 
-function updateWalletUI() {
-    const btn = document.getElementById('wallet-connect-btn');
-    const icon = btn.querySelector('i');
-    
-    if (walletConnected && userWalletAddress) {
-
-        icon.className = 'fas fa-check-circle';
-        btn.innerHTML = "Disconnect"//`<i class="fas fa-check-circle"></i> ${userWalletAddress.slice(0,6)}...${userWalletAddress.slice(-4)}`;
-        btn.style.background = 'linear-gradient(135deg, #00FF9D, #00D4FF)';
-        btn.style.color = '#0A0A0F';
-        btn.style.fontWeight = 'bold';        
-        // Remove click handler (already connected)
-        //btn.onclick = null;
-        //btn.href = '#';
-    }
-}
-
 function disconnectWallet() {
     walletConnected = false;
     userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw";
@@ -118,12 +99,12 @@ cards.forEach(card => {
 console.log("App initialized with mainnet-js");
 }
 
-export async function vote(signalId, direction, signalDirection) {
+export async function vote(signalId, direction, signalDirection, rewardSystem) {
 
-    if (!walletConnected) {
-        alert('Create or connect your BCH wallet to receive vote rewards!');
+    //if (!walletConnected) {
+      //  alert('Create or connect your BCH wallet to vote !');
         //return;
-    }
+    //}
 
     if (!canVote(userWalletAddress)) {
         alert('Please wait 5 seconds between votes');
@@ -134,6 +115,8 @@ export async function vote(signalId, direction, signalDirection) {
     //voteBtn.disabled = true;
     console.log('params vote : ', signalId, direction, signalDirection);
 
+    await commitSignalBCH(rewardSystem)
+    
     await logVote(
         userWalletAddress,
         signalId,
@@ -146,6 +129,35 @@ export async function vote(signalId, direction, signalDirection) {
     alert(`✅ Voted ${direction.toUpperCase()}!`);
     //voteBtn.disabled = false;
     //addToTransactionHistory(result.data);
+}
+
+async function commitSignalBCH(rewardSystem){
+    console.log(`Signal on chain...`);
+    if (!rewardSystem) return ;
+    console.log(`Signal on chain......`);
+
+    //const bchOracle = new BCHOracle(BUSINESS_WALLET);
+
+    const signal = {
+    id: "BTC202602161000",
+    direction: "SHORT",
+    entry: 68700,
+    target: 65000,
+    stopLoss: 71000
+    };
+
+    // 1. Commit to BCH
+    const txId = await rewardSystem.commitSignal(signal);
+
+    // Save txId in your database with signal
+
+    // When signal closes:
+   // const result = "WIN"; // or "LOSS", "BREAK"
+    //const exitPrice = 64500;
+
+    // 2. Settle result
+    //const resultTxId = await bchOracle.settleResult(signal.id, result, exitPrice);
+    //console.log(`Result on chain: https://blockchair.com/bitcoin-cash/transaction/${resultTxId}`);
 }
 
 async function logVote(address, signalId, direction, signalDirection) {

@@ -215,17 +215,6 @@ Click OK to confirm you have saved it.`
     alert(warning)
   }, [])
 
-  // Optional: Function to update UI (if you need global UI updates)
-  const updateWalletUI = useCallback(() => {
-    // Your existing UI update logic here
-    // Example: Update any global UI elements
-    const walletBtn = document.getElementById('wallet-connect-btn')
-    if (walletBtn) {
-      walletBtn.innerHTML = walletConnected 
-        ? `<i class="fas fa-wallet"></i> Disconnect ${walletAddress.substring(0, 6)}...`
-        : '<i class="fas fa-wallet"></i> Connect Wallet'
-    }
-  }, [walletConnected, walletAddress])
 
   return {
     walletConnected,
@@ -234,7 +223,6 @@ Click OK to confirm you have saved it.`
     error,
     connectWallet,
     createWallet,
-    disconnectWallet,
-    updateWalletUI
+    disconnectWallet
   }
 }

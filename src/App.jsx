@@ -13,11 +13,13 @@ import FaqSection from './components/FaqSection'
 import GrapheneProtocol from './components/Graphene'
 import ConnectWalletButton from './components/ConnectWalletButton'  
 import AuraTokens from './components/AuraTokens'
+import SignalHistory from './components/SignalHistory.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
   const [showGrapheneProtocol, setShowGrapheneProtocol] = useState(false)
   const [showTokens, setShowTokens] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
 
   return (
     <RewardProvider>
@@ -27,15 +29,37 @@ function App() {
      <ConnectWalletButton />
 
      <a 
-          href="#auraTokens" 
-          className="nav-link"
-          onClick={(e) => {
-            e.preventDefault()
-            setShowTokens(true)
-          }}
-        >
-          <i className="fas fa-trophy"></i> AuraTokens
-        </a>
+        href="#auraTokens" 
+        className="nav-link"
+        onClick={(e) => {
+          e.preventDefault()
+          setShowTokens(true)
+        }}
+      >
+        <i className="fas fa-trophy"></i> AuraTokens
+      </a>
+
+      <a 
+        href="#signalhistory" 
+        className="nav-link"
+        onClick={(e) => {
+          e.preventDefault()
+          setShowHistory(true)
+        }}
+      >
+        <i className="fas fa-list"></i> Stats
+      </a>
+
+      <a 
+        href="#graphene" 
+        className="nav-link"
+        onClick={(e) => {
+          e.preventDefault()
+          setShowGrapheneProtocol(true)
+        }}
+      >
+        <i className="fas fa-info-circle"></i> Graphene Protocol
+      </a>
 
      <SmoothScrollLink href="#how-it-works">
         <i className="fas fa-question-circle"></i> How It Works
@@ -44,17 +68,6 @@ function App() {
       <SmoothScrollLink href="#faq">
         <i className="fas fa-comments"></i> FAQ
       </SmoothScrollLink>
-      
-      <a 
-          href="#graphene" 
-          className="nav-link"
-          onClick={(e) => {
-            e.preventDefault()
-            setShowGrapheneProtocol(true)
-          }}
-        >
-          <i className="fas fa-info-circle"></i> Graphene Protocol
-        </a>
 
   </nav>
     {/* Header Component */}
@@ -181,6 +194,9 @@ function App() {
     )}
     {showTokens && (
       <AuraTokens onClose={() => setShowTokens(false)} />
+    )}
+    {showHistory && (
+      <SignalHistory onClose={() => setShowHistory(false)} />
     )}
 
     </>
