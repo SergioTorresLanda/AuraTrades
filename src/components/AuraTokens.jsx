@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useReward } from '../contexts/BCHContext'
 import { sendReward } from '../app.js'
-// Import your images
-import yak from '../assets/yak.png';
+
 import bison from '../assets/bisonX.png';
 import lidia from '../assets/lidiaX.png';
 import brahman from '../assets/brahmanX.png';
 import buffalo from '../assets/buffaloX.png';
-import panda from '../assets/grizzly.png';
 import black from '../assets/black.png';
 import grizzly from '../assets/grizzly.png';
 import polar from '../assets/polar.png';
@@ -17,9 +15,9 @@ import cypher from '../assets/cypherpunk.png';
 import satoshi from '../assets/sat.png';
 
 const AuraTokens = ({ onClose }) => {
-    console.log('TestAuraTokens rendering')
+
   const { rewardSystem } = useReward()
-  // Mock data - replace with real user progress
+
   const [userProgress] = useState({
     // Bull tokens progress 
     lidia: 100,
@@ -91,12 +89,10 @@ const AuraTokens = ({ onClose }) => {
   return (
     <div className="aura-tokens-overlay" onClick={onClose}>
     <div className="aura-tokens-modal" onClick={(e) => e.stopPropagation()}>
-      {/* Your existing AuraTokens content */}
       
-      {/* Add close button */}
       <button className="graphene-close-btn" onClick={onClose}>
-          <i className="fas fa-times"></i>
-        </button>
+        <i className="fas fa-times"></i>
+      </button>
       
       {<section className="aura-tokens-section">
       {/* First Section: Bull & Bear Collections */}
@@ -290,9 +286,9 @@ const AuraTokens = ({ onClose }) => {
           </div>
         )}
       </div>
-    </section>}
+      </section>}
     </div>
-  </div>
+    </div>
     
   );
 }
