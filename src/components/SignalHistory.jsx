@@ -203,6 +203,15 @@ const SignalHistory = ({ onClose }) => {
                 {formatDate(signal.closedDate)}
               </div>
             </div>
+            <div className="detail-item proof-link" onClick={() => window.open('https://explorer.salemkode.com/tx/e0d55cd6d5fe966fc87aa81a4797248389a89580e5ad3d168995586b499e3ad3', '_blank')}>
+              <span className="detail-label">Proof</span>
+              <span className="detail-label">OnChain</span>
+              <div className="proof-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+              </div>
+          </div>
           </div>
         ))}
       </div>

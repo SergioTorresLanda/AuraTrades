@@ -6,7 +6,7 @@ const REWARD_LIMITS = {
     totalPool: 0.3 
 };
 
-let userWalletAddress = "bitcoincash:qzld92ae0x8gjgvwa949lftn6q3u7slytvkcz8qcnw"
+let userWalletAddress = "bitcoincash:qqzzmf9z334gw68lmhtzg68ktqpf4yp34gruglkljr"
 let walletConnected = false;
 const voteRateLimit = {};
 
@@ -132,18 +132,15 @@ export async function vote(signalId, direction, signalDirection, rewardSystem) {
 }
 
 async function commitSignalBCH(rewardSystem){
-    console.log(`Signal on chain...`);
     if (!rewardSystem) return ;
-    console.log(`Signal on chain......`);
-
     //const bchOracle = new BCHOracle(BUSINESS_WALLET);
 
     const signal = {
-    id: "BTC202602161000",
+    id: "ETH202602170100",
     direction: "SHORT",
-    entry: 68700,
-    target: 65000,
-    stopLoss: 71000
+    entry: 1980,
+    target: 1726,
+    stopLoss: 2240
     };
 
     // 1. Commit to BCH
@@ -252,10 +249,64 @@ export async function sendReward(reward, rewardSystem) {
           reward
       );
 
-    alert(`✅ Reward sent !\n\n` + 
+      showTxNotification(reward, rewardResult.txId, rewardResult.explorerUrl)
+   /* alert(`✅ Reward sent !\n\n` + 
     `${reward} BCH was sent to your wallet.\n` +
     `Transaction: ${rewardResult.txId}\n` +
-    `View on explorer: ${rewardResult.explorerUrl}`);
+    `Transaction hash copied to clipboard!\n` +
+    `Paste to view or click link:\n` +
+    `${rewardResult.explorerUrl}`);*/
+}
+
+// Show notification with copy functionality
+const showTxNotification = (reward, txId, explorerUrl) => {
+    // Show browser notification if supported
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('✅ Reward Sent!', {
+            body: `${reward} BCH sent. Click to view transaction.`,
+            requireInteraction: true
+        }).onclick = () => window.open(explorerUrl, '_blank');
+    }
+    
+    // Also show a custom toast with copy
+    const toast = document.createElement('div');
+    toast.className = 'tx-toast';
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+            <div>
+                <strong>${reward} BCH sent!</strong>
+                <div class="tx-preview" onclick="navigator.clipboard.writeText('${txId}')">
+                    <code>${txId.substring(0, 16)}...${txId.slice(-8)}</code>
+                    <i class="fas fa-copy"></i>
+                </div>
+                <a href="${explorerUrl}" target="_blank" class="toast-link">
+                    <i class="fas fa-external-link-alt"></i> View
+                </a>
+            </div>
+            <button class="toast-close" onclick="this.closest('.tx-toast').remove()">×</button>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    
+    // Auto remove after 10 seconds
+    setTimeout(() => toast.remove(), 10000);
+};
+
+export async function sendToken(token, rewardSystem) {
+    if (!rewardSystem) return ;
+    
+    console.log('send token 00 : ');
+    // sends CashToken (using mainnet-js)
+      const tokenResult = await rewardSystem.sendToken(
+          userWalletAddress,
+          token
+      );
+
+    alert(`✅ Token minted !\n\n` + 
+    `A CashToken was sent to your wallet.\n` +
+    `Transaction: ${tokenResult.txId.txId}\n` +
+    `View on explorer: https://explorer.salemkode.com/tx/${tokenResult.txId.txId}`);
 }
 
 const createTrophyToken = (userData, tokenData) => {

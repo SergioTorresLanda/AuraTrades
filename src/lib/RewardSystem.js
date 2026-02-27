@@ -109,7 +109,7 @@ export class RewardSystem {
         const commitment = {
           t: "auratradesSignal2026",
           i: id,
-          d: direction === 'LONG' ? 'L' : 'S',
+          d: direction,
           e: entry,
           tp: target,
           sl: stopLoss,
@@ -121,28 +121,22 @@ export class RewardSystem {
         const base64Data = btoa(jsonString);
 
         try {
-           /* const tx = await this.wallet.send({
-                to: [
-                    [this.wallet.cashaddr, 550, "sats"],
-                    { "OP_RETURNB64": base64Data }
-                ]
-            });*/
+        
             const tx = await this.wallet.send([
             {
                 cashaddr: this.wallet.cashaddr,
-                value: 0.00001, //Dust
-                unit: 'bch',
-                OP_RETURNB64: base64Data
+                value: 0.00001, 
+                unit: 'bch'
             },
             {
                 dataString: JSON.stringify(commitment)
             }
             ]);
-            console.log(`https://blockchair.com/bitcoin-cash/transaction/${tx.txId}`);
+            console.log(`https://explorer.salemkode.com/tx/${tx.txId}`);
             return {
                 success: true,
                 txId: tx.txId,
-                explorer: `https://blockchair.com/bitcoin-cash/transaction/${tx.txId}`
+                explorer: `https://explorer.salemkode.com/tx/${tx.txId}`
             };
         } catch (error) {
             console.error('❌ Commit failed:', error);
@@ -151,5 +145,88 @@ export class RewardSystem {
                 error: error.message
             };
         }       
-      }
+    }
+
+    async createTokenCategory(wallet, trophyToken) {
+    // Create unique category for this achievement type
+        // Use mainnet-js to create token category first time
+        try {
+            const category = await wallet.tokenGenesis({
+            amount: 1, // Mint exactly 1 NFT
+            value: 1046, // Add dust value to create a proper UTXO
+            unit: 'sat',
+            nft: {  // Note: nested under nft in v3.0.0 [citation:1]
+                capability: 'none', // 'none', 'mutable', or 'minting'
+                commitment: trophyToken.commitment || "0x" + Buffer.from(trophyToken.id).toString('hex')
+            }
+            });
+            // Store this category ID for future mints!
+            // e.g., in Firestore: achievements/lidia/categoryId
+            console.log('Full category response:', JSON.stringify(category, null, 2));
+            console.log('Category keys:', Object.keys(category));
+
+            return category.data.achievementId;
+            
+        } catch (error) {
+            console.error('Category creation failed:', error);
+            throw error;
+        }
+
+    }
+
+    async mintAuraTokenToUser(categoryId, recipientAddress) {
+    try {
+        const tx = await this.wallet.send([
+            {
+            cashaddr: recipientAddress,
+            value: 1046, // Add dust value to create a proper UTXO
+            unit: 'sat',
+            tokenId: categoryId,
+            tokenAmount: 1
+            }
+        ]);
+        
+        return {
+            success: true,
+            txId: tx.txId,
+            explorer: `https://blockchair.com/bitcoin-cash/transaction/${tx.txId}`
+        };
+        
+    } catch (error) {
+        console.error('Minting failed:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+    async sendToken(toAddress, trophyToken) {
+        if (!this.wallet) {
+            throw new Error('Reward wallet not initialized');
+        }
+    
+        console.log(`Sending BCHTOKEN to ${toAddress}...`);
+    
+        try {
+            console.log('Starting Cashtoken minting...');
+            // Determine network (mainnet vs testnet)
+            //const network = userWallet.address.startsWith('bchtest:') ? TestNet : MainNet;
+            // 1. Create token category (first token of this type creates category)
+           // const categoryId = await this.createTokenCategory(this.wallet, trophyToken);
+            // 2. Mint the specific token
+            // 3. Send token to recipient
+            const categoryId = "86b5831068c8325977707be51ab6ea40eded5c4821128b3c32ad8059250daf5a"
+            const txId = await this.mintAuraTokenToUser(categoryId, toAddress);
+            
+            console.log('Cashtoken minted successfully!', { categoryId, txId });
+            return { success: true, categoryId, txId };
+            
+        } catch (error) {
+            console.error('Cashtoken minting failed:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+
 }
