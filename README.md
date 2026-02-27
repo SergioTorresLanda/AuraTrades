@@ -60,9 +60,10 @@ Phase 4: Ecosystem Expansion (Year 2)
 
 ## 6. Tokenomics & Rewards
 Reward Structure:
-* Base Reward: 0.0001 BCH per vote (≈ $0.06)
-* Accuracy Bonus: 0.001 BCH for correct predictions (≈ $0.60)
-* Referral Bonus: 10% of referred user rewards
+* CashTokens with BCH rewards are unlocked with user voting stats measuring 3 things
+* Accuracy (vote correct)
+* Consistency (vote everyday) 
+* Support BCH (vote with a connected wallet holding BCH balance)
 
 ## 7. Tech Stack
 * Frontend: React/Next.js + AuraTrades Design System
